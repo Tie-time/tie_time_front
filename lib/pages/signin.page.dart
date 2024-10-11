@@ -15,6 +15,7 @@ class SigninPage extends StatefulWidget {
 class _SigninPageState extends State<SigninPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
   Future<void> _signIn(String email, String password) async {
@@ -60,58 +61,83 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   void _handleSignIn() {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      _showMessage('Veuillez remplir tous les champs.');
-      return;
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+      _signIn(email, password);
     }
+  }
 
-    _signIn(email, password);
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Veuillez entrer votre email';
+    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Veuillez entrer un email valide';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Veuillez entrer votre mot de passe';
+    }
+    if (value.length < 6) {
+      return 'Le mot de passe doit contenir au moins 6 caractères';
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+        body: Center(
+      child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-        children: [
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _passwordController,
-            decoration: const InputDecoration(
-              labelText: 'Mot de passe',
-              border: OutlineInputBorder(),
-            ),
-            obscureText: true,
-          ),
-          const SizedBox(height: 16.0),
-          _isLoading
-              ? const CircularProgressIndicator()
-              : FilledButton(
-                  onPressed: () {
-                    _handleSignIn();
-                  },
-                  child: const Text('Se connecter')),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/signup');
-            },
-            child: const Text(
-                'Pas encore de compte ? Clique ici pour en créer un !',
-                style: TextStyle(decoration: TextDecoration.underline)),
-          ),
-        ],
-      )),
-    );
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: _validateEmail,
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Mot de passe',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: _validatePassword,
+                    ),
+                    const SizedBox(height: 16.0),
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : FilledButton(
+                            onPressed: () {
+                              _handleSignIn();
+                            },
+                            child: const Text('Se connecter'))
+                  ])),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
+                child: const Text(
+                    'Pas encore de compte ? Clique ici pour en créer un !',
+                    style: TextStyle(decoration: TextDecoration.underline)),
+              ),
+            ],
+          )),
+    ));
   }
 }
