@@ -62,24 +62,32 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SigninForm(
-              onSignIn: _signIn,
-              isLoading: _isLoading,
-            ),
-            const SizedBox(height: 16.0),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/signup');
-              },
-              child: const Text(
-                  'Pas encore de compte ? Clique ici pour en créer un !',
-                  style: TextStyle(decoration: TextDecoration.underline)),
-            ),
-          ])),
-    ));
+        body: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Center(
+                child: SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                  // Image.asset(
+                  //   'assets/logo.png', // Assurez-vous d'avoir un logo dans le dossier assets
+                  //   height: 100,
+                  // ),
+                  const SizedBox(height: 32.0),
+                  SigninForm(
+                    onSignIn: _signIn,
+                    isLoading: _isLoading,
+                  ),
+                  const SizedBox(height: 24.0),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/signup');
+                    },
+                    child: const Text(
+                        'Pas encore de compte ? Clique ici pour en créer un !',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(decoration: TextDecoration.underline)),
+                  ),
+                ])))));
   }
 }

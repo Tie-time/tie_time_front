@@ -59,22 +59,20 @@ class _SigninFormState extends State<SigninForm> {
             controller: _emailController,
             decoration: const InputDecoration(
               labelText: 'Email',
-              border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
             validator: _validateEmail,
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 24.0),
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(
               labelText: 'Mot de passe',
-              border: OutlineInputBorder(),
             ),
             obscureText: true,
             validator: _validatePassword,
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 24.0),
           widget.isLoading
               ? const CircularProgressIndicator()
               : FilledButton(
