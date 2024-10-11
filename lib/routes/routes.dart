@@ -11,7 +11,7 @@ class RouteManager {
 
   static Future<bool> _isAuthenticated() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey('authToken');
+    return prefs.containsKey('token');
   }
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
