@@ -10,7 +10,51 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      // Theme
+      theme: ThemeData(
+          // Text
+          textTheme: TextTheme(
+              bodyMedium: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF2D3A3E))),
+          // Body / Scaffold
+          scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+          // Inputs
+          inputDecorationTheme: InputDecorationTheme(
+            contentPadding: EdgeInsets.all(16.0),
+            filled: true,
+            fillColor: const Color(0xFFFFFFFF),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: const BorderSide(
+                color: Color(0xFFBFBEBE),
+                width: 2.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: const BorderSide(
+                color: Color(0xFF2E7984),
+                width: 2.0,
+              ),
+            ),
+            labelStyle: TextStyle(color: Color(0xFFBFBEBE), fontSize: 20.0),
+          ),
+          // Buttons
+          filledButtonTheme: FilledButtonThemeData(
+            style: FilledButton.styleFrom(
+                backgroundColor: Color(0xFF2E7984),
+                minimumSize: const Size(double.infinity, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 16.0),
+                textStyle:
+                    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+          )),
       initialRoute: RouteManager.home,
       onGenerateRoute: RouteManager.generateRoute,
     );
