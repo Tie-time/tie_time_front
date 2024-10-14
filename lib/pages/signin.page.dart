@@ -46,7 +46,7 @@ class _SigninPageState extends State<SigninPage> {
         Navigator.pushReplacementNamed(context, RouteManager.home);
       }
     } catch (e) {
-      _showMessage('Une erreur est survenue: $e');
+      _showMessage('$e');
     } finally {
       setState(() {
         _isLoading = false;
