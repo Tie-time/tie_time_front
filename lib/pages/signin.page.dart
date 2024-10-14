@@ -66,28 +66,37 @@ class _SigninPageState extends State<SigninPage> {
             padding: const EdgeInsets.all(32.0),
             child: Center(
                 child: SingleChildScrollView(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                  // Image.asset(
-                  //   'assets/logo.png', // Assurez-vous d'avoir un logo dans le dossier assets
-                  //   height: 100,
-                  // ),
-                  const SizedBox(height: 32.0),
-                  SigninForm(
-                    onSignIn: _signIn,
-                    isLoading: _isLoading,
-                  ),
-                  const SizedBox(height: 24.0),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: const Text(
-                        'Pas encore de compte ? Clique ici pour en créer un !',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(decoration: TextDecoration.underline)),
-                  ),
-                ])))));
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 580.0,
+                        ), // Définir la hauteur minimale de la colonne
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SizedBox.square(
+                                dimension: 120.0,
+                                child: ColoredBox(color: Color(0xFF232323)),
+                              ),
+                              // Image.asset(
+                              //   'assets/logo.png', // Assurez-vous d'avoir un logo dans le dossier assets
+                              //   height: 100,
+                              // ),
+                              const SizedBox(height: 64.0),
+                              SigninForm(
+                                onSignIn: _signIn,
+                                isLoading: _isLoading,
+                              ),
+                              const SizedBox(height: 24.0),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/signup');
+                                },
+                                child: const Text(
+                                    'Pas encore de compte ? Clique ici pour en créer un !',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline)),
+                              ),
+                            ]))))));
   }
 }
