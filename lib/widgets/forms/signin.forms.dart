@@ -62,6 +62,7 @@ class _SigninFormState extends State<SigninForm> {
             ),
             keyboardType: TextInputType.emailAddress,
             validator: _validateEmail,
+            style: TextStyle(fontSize: 20.0, color: Color(0xFF2D3A3E)),
           ),
           const SizedBox(height: 24.0),
           TextFormField(
@@ -71,6 +72,7 @@ class _SigninFormState extends State<SigninForm> {
             ),
             obscureText: true,
             validator: _validatePassword,
+            style: TextStyle(fontSize: 20.0, color: Color(0xFF2D3A3E)),
           ),
           const SizedBox(height: 24.0),
           widget.isLoading
