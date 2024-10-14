@@ -69,11 +69,15 @@ class _SigninPageState extends State<SigninPage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                  const SizedBox.square(
+                    dimension: 120.0,
+                    child: ColoredBox(color: Color(0xFF232323)),
+                  ),
                   // Image.asset(
                   //   'assets/logo.png', // Assurez-vous d'avoir un logo dans le dossier assets
                   //   height: 100,
                   // ),
-                  const SizedBox(height: 32.0),
+                  const SizedBox(height: 64.0),
                   SigninForm(
                     onSignIn: _signIn,
                     isLoading: _isLoading,
