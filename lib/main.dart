@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           filledButtonTheme: FilledButtonThemeData(
             style: FilledButton.styleFrom(
                 backgroundColor: Color(0xFF2E7984),
-                minimumSize: const Size(double.infinity, 0),
+                minimumSize: const Size(double.infinity),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
