@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:tie_time_front/routes/routes.dart';
+import 'package:tie_time_front/services/api.service.dart';
+import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/widgets/forms/signup.form.dart';
 
 class SignupPage extends StatefulWidget {
@@ -15,6 +14,14 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   bool _isLoading = false;
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = AuthService(
+        apiService: ApiService(baseUrl: 'http://10.0.2.2:5001/api/users'));
+  }
 
   Future<void> _signup(String email, String password, String pseudo) async {
     setState(() {
@@ -22,20 +29,8 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/api/users/signup'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(
-            {'email': email, 'password': password, 'pseudo': pseudo}),
-      );
+      var data = await _authService.signup(email, password, pseudo);
 
-      if (response.statusCode != 201) {
-        var result = jsonDecode(response.body);
-        var message = result['error'];
-        throw Exception(message);
-      }
-
-      var data = jsonDecode(response.body);
       // Naviguer vers la page principale
       Navigator.pushReplacementNamed(context, RouteManager.signin);
 
