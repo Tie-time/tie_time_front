@@ -4,6 +4,7 @@ import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/widgets/forms/signup.form.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -20,7 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   void initState() {
     super.initState();
     _authService = AuthService(
-        apiService: ApiService(baseUrl: 'http://10.0.2.2:5001/api/users'));
+        apiService: ApiService(baseUrl: dotenv.env['API_BASE_URL']!));
   }
 
   Future<void> _signup(String email, String password, String pseudo) async {
