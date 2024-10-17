@@ -4,6 +4,7 @@ import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
+import 'package:tie_time_front/services/messages.service.dart';
 import 'package:tie_time_front/widgets/forms/signup.form.dart';
 
 class SignupPage extends StatefulWidget {
@@ -35,19 +36,14 @@ class _SignupPageState extends State<SignupPage> {
       // Naviguer vers la page principale
       Navigator.pushReplacementNamed(context, RouteManager.signin);
 
-      _showMessage(data['success']);
+      MessageService.showSuccesMessage(context, data['success']);
     } catch (e) {
-      _showMessage('$e');
+      MessageService.showErrorMessage(context, '$e');
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
-  }
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
