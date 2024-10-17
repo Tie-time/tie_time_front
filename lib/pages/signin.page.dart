@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tie_time_front/routes/routes.dart';
@@ -73,14 +74,10 @@ class _SigninPageState extends State<SigninPage> {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const SizedBox.square(
-                                dimension: 120.0,
-                                child: ColoredBox(color: Color(0xFF232323)),
+                              SvgPicture.asset(
+                                'assets/logo.svg',
+                                height: 120,
                               ),
-                              // Image.asset(
-                              //   'assets/logo.png', // Assurez-vous d'avoir un logo dans le dossier assets
-                              //   height: 100,
-                              // ),
                               const SizedBox(height: 64.0),
                               SigninForm(
                                 onSignIn: _signIn,
