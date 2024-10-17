@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/widgets/forms/signin.forms.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -21,8 +21,8 @@ class _SigninPageState extends State<SigninPage> {
   @override
   void initState() {
     super.initState();
-    _authService = AuthService(
-        apiService: ApiService(baseUrl: dotenv.env['API_BASE_URL']!));
+    _authService =
+        AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
   }
 
   Future<void> _signIn(String email, String password) async {
@@ -32,12 +32,6 @@ class _SigninPageState extends State<SigninPage> {
 
     try {
       var data = await _authService.signin(email, password);
-
-      // final response = await http.post(
-      //   Uri.parse('http://10.0.2.2:5001/api/users/signin'),
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: jsonEncode({'email': email, 'password': password}),
-      // );
 
       String token = data['token'];
 

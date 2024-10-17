@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/widgets/forms/signup.form.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -20,8 +20,8 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     super.initState();
-    _authService = AuthService(
-        apiService: ApiService(baseUrl: dotenv.env['API_BASE_URL']!));
+    _authService =
+        AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
   }
 
   Future<void> _signup(String email, String password, String pseudo) async {
