@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tie_time_front/routes/routes.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: "dev.env");
   runApp(const MyApp());
 }
 

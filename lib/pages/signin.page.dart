@@ -1,10 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/routes/routes.dart';
+import 'package:tie_time_front/services/api.service.dart';
+import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/widgets/forms/signin.forms.dart';
 
 class SigninPage extends StatefulWidget {
@@ -16,6 +16,14 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
   bool _isLoading = false;
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService =
+        AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
+  }
 
   Future<void> _signIn(String email, String password) async {
     setState(() {
@@ -23,29 +31,16 @@ class _SigninPageState extends State<SigninPage> {
     });
 
     try {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/api/users/signin'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
+      var data = await _authService.signin(email, password);
 
-      if (response.statusCode != 200) {
-        var result = jsonDecode(response.body);
-        var message = result['error'];
-        throw Exception(message);
-      }
+      String token = data['token'];
 
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        String token = data['token'];
+      // Stocker le token
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
 
-        // Stocker le token
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
-
-        // Naviguer vers la page principale
-        Navigator.pushReplacementNamed(context, RouteManager.home);
-      }
+      // Naviguer vers la page principale
+      Navigator.pushReplacementNamed(context, RouteManager.home);
     } catch (e) {
       _showMessage('$e');
     } finally {
