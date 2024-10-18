@@ -41,29 +41,35 @@ class _MainPageState extends State<MainPage> {
           automaticallyImplyLeading: false,
           title: const Text('Tie Time'),
         ),
-        body: Center(
-            child: Column(children: [
-          FutureBuilder<User>(
-            future: _futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.email);
-              } else if (snapshot.hasError) {
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  MessageService.showErrorMessage(
-                      context, snapshot.error.toString());
-                });
-                return Container();
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-          FilledButton(
-              onPressed: () {
-                _handleLogout();
-              },
-              child: Text('Se déconnecter')),
-        ])));
+        body: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Center(
+                child: SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                  FutureBuilder<User>(
+                    future: _futureUser,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data!.email);
+                      } else if (snapshot.hasError) {
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                          MessageService.showErrorMessage(
+                              context, snapshot.error.toString());
+                        });
+                        return Container();
+                      }
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+                  FilledButton(
+                    onPressed: () {
+                      _handleLogout();
+                    },
+                    child: Text('Se déconnecter'),
+                  ),
+                ])))));
   }
 }
