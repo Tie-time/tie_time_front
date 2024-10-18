@@ -1,3 +1,4 @@
+import 'package:tie_time_front/models/user.model.dart';
 import 'package:tie_time_front/services/api.service.dart';
 
 class AuthService {
@@ -20,5 +21,10 @@ class AuthService {
       'email': email,
       'password': password,
     });
+  }
+
+  Future<User> me() async {
+    Map<String, dynamic> responseBody = await apiService.get('$prefix/me');
+    return User.fromJson(responseBody);
   }
 }
