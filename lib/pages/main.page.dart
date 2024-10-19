@@ -39,7 +39,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Tie Time'),
+          title: const Text('Dashboard'),
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
