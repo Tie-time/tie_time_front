@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tie_time_front/pages/acount.page.dart';
 import 'package:tie_time_front/pages/analyse.page.dart';
-import 'package:tie_time_front/pages/configuration.page.dart';
-import 'package:tie_time_front/pages/main.page.dart';
 import 'package:tie_time_front/pages/signin.page.dart';
 import 'package:tie_time_front/pages/signup.page.dart';
+import 'package:tie_time_front/widgets/navigations/main.navigation.dart';
 
 class RouteManager {
   static const String home = '/';
@@ -23,7 +21,7 @@ class RouteManager {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return _buildAuthRoute(const MainPage());
+        return _buildAuthRoute(const MainNavigation());
       case signin:
         return MaterialPageRoute(builder: (_) => const SigninPage());
       case signup:
@@ -31,9 +29,9 @@ class RouteManager {
       case analyse:
         return _buildAuthRoute(const AnalysePage());
       case configuration:
-        return _buildAuthRoute(const ConfigurationPage());
+        return _buildAuthRoute(const MainNavigation());
       case account:
-        return _buildAuthRoute(const AccountPage());
+        return _buildAuthRoute(const MainNavigation());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
