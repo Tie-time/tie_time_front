@@ -20,6 +20,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late Future<User> _futureUser;
   late AuthService _authService;
+  late DateTime _currentDate;
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _MainPageState extends State<MainPage> {
     _authService =
         AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
     _futureUser = _authService.me();
+    _currentDate = DateTime.now();
     initializeDateFormatting('fr_FR', null).then((_) {
       setState(() {});
     });
@@ -39,11 +41,23 @@ class _MainPageState extends State<MainPage> {
     Navigator.pushReplacementNamed(context, RouteManager.home);
   }
 
+  void _addDay() {
+    setState(() {
+      _currentDate = _currentDate.add(Duration(days: 1));
+    });
+  }
+
+  void _removeDay() {
+    setState(() {
+      _currentDate = _currentDate.subtract(Duration(days: 1));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Obtenir la date actuelle et la formater
     String formattedDate =
-        DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(DateTime.now());
+        DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(_currentDate);
 
     return Scaffold(
         appBar: AppBar(
@@ -78,6 +92,15 @@ class _MainPageState extends State<MainPage> {
                       _handleLogout();
                     },
                     child: Text('Se déconnecter'),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _addDay,
+                    child: Text('Ajouter un jour'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _removeDay,
+                    child: Text('Enlever un jour'),
                   ),
                 ])))));
   }
