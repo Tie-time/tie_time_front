@@ -75,7 +75,16 @@ class MyApp extends StatelessWidget {
           snackBarTheme: SnackBarThemeData(
               backgroundColor: Color(0xFFE95569),
               contentTextStyle:
-                  TextStyle(fontSize: 16.0, color: Color(0xFFFFFFFF)))),
+                  TextStyle(fontSize: 16.0, color: Color(0xFFFFFFFF))),
+          // Navigation
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor:
+                Color(0xFFFFFFFF), // Couleur de fond de la BottomNavigationBar
+            selectedItemColor:
+                Color(0xFF2E7984), // Couleur de l'élément sélectionné
+            unselectedItemColor:
+                Color(0xFFBFBEBE), // Couleur des éléments non sélectionnés
+          )),
       initialRoute: RouteManager.home,
       onGenerateRoute: RouteManager.generateRoute,
     );

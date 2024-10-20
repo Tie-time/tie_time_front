@@ -55,6 +55,7 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
         ],
         currentIndex: _selectedIndex,
+        iconSize: 40,
         onTap: _onItemTapped,
       ),
     );
