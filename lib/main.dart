@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
                   fontSize: 20.0,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF2D3A3E))),
+          appBarTheme: AppBarTheme(backgroundColor: Color(0xFFFFFFFF)),
           // Body / Scaffold
           scaffoldBackgroundColor: const Color(0xFFFFFFFF),
           // Inputs

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/models/user.model.dart';
@@ -7,6 +8,7 @@ import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/services/messages.service.dart';
+import 'package:intl/intl.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -25,6 +27,9 @@ class _MainPageState extends State<MainPage> {
     _authService =
         AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
     _futureUser = _authService.me();
+    initializeDateFormatting('fr_FR', null).then((_) {
+      setState(() {});
+    });
   }
 
   void _handleLogout() async {
@@ -36,10 +41,14 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Obtenir la date actuelle et la formater
+    String formattedDate =
+        DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(DateTime.now());
+
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Dashboard'),
+          title: Text(formattedDate),
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
