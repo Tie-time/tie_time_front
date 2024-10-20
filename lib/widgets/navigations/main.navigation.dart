@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tie_time_front/pages/account.page.dart';
 import 'package:tie_time_front/pages/analyse.page.dart';
 import 'package:tie_time_front/pages/main.page.dart';
@@ -36,26 +37,61 @@ class _MainNavigationState extends State<MainNavigation> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: SvgPicture.asset('assets/icons/home.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFFBFBEBE), BlendMode.srcIn),
+                width: 40,
+                height: 40),
+            activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFF2E7984), BlendMode.srcIn),
+                width: 40,
+                height: 40),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: SvgPicture.asset('assets/icons/analyse.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFFBFBEBE), BlendMode.srcIn),
+                width: 40,
+                height: 40),
+            activeIcon: SvgPicture.asset('assets/icons/analyse.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFF2E7984), BlendMode.srcIn),
+                width: 40,
+                height: 40),
             label: 'Analyse',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: SvgPicture.asset('assets/icons/configuration.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFFBFBEBE), BlendMode.srcIn),
+                width: 40,
+                height: 40),
+            activeIcon: SvgPicture.asset('assets/icons/configuration.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFF2E7984), BlendMode.srcIn),
+                width: 40,
+                height: 40),
             label: 'Configuration',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: SvgPicture.asset('assets/icons/account.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFFBFBEBE), BlendMode.srcIn),
+                width: 40,
+                height: 40),
+            activeIcon: SvgPicture.asset('assets/icons/account.svg',
+                colorFilter:
+                    ColorFilter.mode(Color(0xFF2E7984), BlendMode.srcIn),
+                width: 40,
+                height: 40),
             label: 'Account',
           ),
         ],
         currentIndex: _selectedIndex,
-        iconSize: 40,
         onTap: _onItemTapped,
       ),
     );
