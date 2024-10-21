@@ -53,6 +53,21 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _currentDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: const Locale('fr', 'FR'),
+    );
+    if (picked != null && picked != _currentDate) {
+      setState(() {
+        _currentDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Obtenir la date actuelle et la formater
@@ -101,6 +116,10 @@ class _MainPageState extends State<MainPage> {
                   ElevatedButton(
                     onPressed: _removeDay,
                     child: Text('Enlever un jour'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('Choisir une date'),
                   ),
                 ])))));
   }

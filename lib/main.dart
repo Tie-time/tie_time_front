@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tie_time_front/routes/routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   await dotenv.load(fileName: "dev.env");
@@ -59,6 +60,17 @@ class MyApp extends StatelessWidget {
               ),
               labelStyle: TextStyle(color: Color(0xFFBFBEBE), fontSize: 20.0),
               errorStyle: TextStyle(color: Color(0xFFE95569))),
+          // DatePicker
+          datePickerTheme: DatePickerThemeData(
+              backgroundColor: Color(0xFFFFFFFF),
+              dayOverlayColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
+              todayForegroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
+              cancelButtonStyle: ButtonStyle(
+                  foregroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
+                  overlayColor: WidgetStatePropertyAll(Color(0xFFE2F9FF))),
+              confirmButtonStyle: ButtonStyle(
+                  foregroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
+                  overlayColor: WidgetStatePropertyAll(Color(0xFFE2F9FF)))),
           // Buttons
           filledButtonTheme: FilledButtonThemeData(
             style: FilledButton.styleFrom(
@@ -88,6 +100,15 @@ class MyApp extends StatelessWidget {
           )),
       initialRoute: RouteManager.home,
       onGenerateRoute: RouteManager.generateRoute,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('fr', 'FR'),
+      ],
     );
   }
 }
