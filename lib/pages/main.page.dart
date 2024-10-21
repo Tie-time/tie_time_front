@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
@@ -73,11 +74,79 @@ class _MainPageState extends State<MainPage> {
     // Obtenir la date actuelle et la formater
     String formattedDate =
         DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(_currentDate);
+    List<String> dateParts = formattedDate.split(' ');
 
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(formattedDate),
+          title: SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: _removeDay,
+                      child: SvgPicture.asset(
+                        'assets/icons/home.svg',
+                        colorFilter: ColorFilter.mode(
+                            Color(0xFFBFBEBE), BlendMode.srcIn),
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: '${dateParts[0]} ${dateParts[1]}',
+                            style: TextStyle(
+                              color: Color(
+                                  0xFF2E7984), // Couleur du texte de l'AppBar
+                              fontSize: 64.0,
+                            ), // Jour
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _addDay,
+                      child: SvgPicture.asset(
+                        'assets/icons/home.svg',
+                        colorFilter: ColorFilter.mode(
+                            Color(0xFFBFBEBE), BlendMode.srcIn),
+                        width: 40,
+                        height: 40,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: '${dateParts[2]} ${dateParts[3]}',
+                            style: TextStyle(
+                              color: Color(
+                                  0xFF2E7984), // Couleur du texte de l'AppBar
+                              fontSize: 20.0, // Jour
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
@@ -107,19 +176,6 @@ class _MainPageState extends State<MainPage> {
                       _handleLogout();
                     },
                     child: Text('Se déconnecter'),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _addDay,
-                    child: Text('Ajouter un jour'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _removeDay,
-                    child: Text('Enlever un jour'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: Text('Choisir une date'),
                   ),
                 ])))));
   }
