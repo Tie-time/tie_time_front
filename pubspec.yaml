@@ -69,6 +69,8 @@ flutter:
     - assets/icons/analyse.svg
     - assets/icons/configuration.svg
     - assets/icons/account.svg
+    - assets/icons/arrow-left.svg
+    - assets/icons/arrow-right.svg
     - dev.env
 
   # An image asset can refer to one or more resolution-specific "variants", see

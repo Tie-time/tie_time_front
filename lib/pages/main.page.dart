@@ -88,7 +88,7 @@ class _MainPageState extends State<MainPage> {
                     GestureDetector(
                       onTap: _removeDay,
                       child: SvgPicture.asset(
-                        'assets/icons/home.svg',
+                        'assets/icons/arrow-left.svg',
                         colorFilter: ColorFilter.mode(
                             Color(0xFFBFBEBE), BlendMode.srcIn),
                         width: 40,
@@ -114,7 +114,7 @@ class _MainPageState extends State<MainPage> {
                     GestureDetector(
                       onTap: _addDay,
                       child: SvgPicture.asset(
-                        'assets/icons/home.svg',
+                        'assets/icons/arrow-right.svg',
                         colorFilter: ColorFilter.mode(
                             Color(0xFFBFBEBE), BlendMode.srcIn),
                         width: 40,
