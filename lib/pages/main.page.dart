@@ -101,13 +101,13 @@ class _MainPageState extends State<MainPage> {
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: '${dateParts[0]} ${dateParts[1]}',
-                            style: TextStyle(
-                              color: Color(
-                                  0xFF2E7984), // Couleur du texte de l'AppBar
-                              fontSize: 64.0,
-                            ), // Jour
-                          ),
+                              text: '${dateParts[0]} ${dateParts[1]}',
+                              style: TextStyle(
+                                  fontFamily: "Londrina",
+                                  fontSize: 56,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFF2E7984)) // Jour
+                              ),
                         ),
                       ),
                     ),

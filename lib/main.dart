@@ -17,8 +17,12 @@ class MyApp extends StatelessWidget {
       // Theme
       theme: ThemeData(
           appBarTheme: AppBarTheme(
-            toolbarHeight: 100.0,
-          ),
+              toolbarHeight: 100.0,
+              titleTextStyle: TextStyle(
+                  fontFamily: "Londrina",
+                  fontSize: 64,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF2E7984))),
           colorScheme: ColorScheme.light(
             primary: Color(0xFF2E7984),
             secondary: Color(0xFFF8A980),
@@ -34,6 +38,7 @@ class MyApp extends StatelessWidget {
           // Text
           textTheme: TextTheme(
               bodyMedium: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 20.0,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF2D3A3E))),
