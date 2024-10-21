@@ -16,13 +16,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // Theme
       theme: ThemeData(
+          colorScheme: ColorScheme.light(
+            primary: Color(0xFF2E7984),
+            secondary: Color(0xFFF8A980),
+            tertiary: Color(0xFFE95569),
+            surface: Color(0xFFFFFFFF),
+            error: Color(0xFFE95569),
+            onPrimary: Color(0xFFFFFFFF),
+            onSecondary: Color(0xFFFFFFFF),
+            onTertiary: Color(0xFFFFFFFF),
+            onSurface: Color(0xFF2D3A3E),
+            onError: Color(0xFFFFFFFF),
+          ),
           // Text
           textTheme: TextTheme(
               bodyMedium: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF2D3A3E))),
-          appBarTheme: AppBarTheme(backgroundColor: Color(0xFFFFFFFF)),
           // Body / Scaffold
           scaffoldBackgroundColor: const Color(0xFFFFFFFF),
           // Inputs
@@ -60,17 +71,6 @@ class MyApp extends StatelessWidget {
               ),
               labelStyle: TextStyle(color: Color(0xFFBFBEBE), fontSize: 20.0),
               errorStyle: TextStyle(color: Color(0xFFE95569))),
-          // DatePicker
-          datePickerTheme: DatePickerThemeData(
-              backgroundColor: Color(0xFFFFFFFF),
-              dayOverlayColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
-              todayForegroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
-              cancelButtonStyle: ButtonStyle(
-                  foregroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
-                  overlayColor: WidgetStatePropertyAll(Color(0xFFE2F9FF))),
-              confirmButtonStyle: ButtonStyle(
-                  foregroundColor: WidgetStatePropertyAll(Color(0xFF2E7984)),
-                  overlayColor: WidgetStatePropertyAll(Color(0xFFE2F9FF)))),
           // Buttons
           filledButtonTheme: FilledButtonThemeData(
             style: FilledButton.styleFrom(
@@ -91,10 +91,6 @@ class MyApp extends StatelessWidget {
                   TextStyle(fontSize: 16.0, color: Color(0xFFFFFFFF))),
           // Navigation
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor:
-                Color(0xFFFFFFFF), // Couleur de fond de la BottomNavigationBar
-            selectedItemColor:
-                Color(0xFF2E7984), // Couleur de l'élément sélectionné
             unselectedItemColor:
                 Color(0xFFBFBEBE), // Couleur des éléments non sélectionnés
           )),
