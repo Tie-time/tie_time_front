@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
@@ -9,7 +8,7 @@ import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/services/messages.service.dart';
-import 'package:intl/intl.dart';
+import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -71,83 +70,12 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtenir la date actuelle et la formater
-    String formattedDate =
-        DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(_currentDate);
-    List<String> dateParts = formattedDate.split(' ');
-
     return Scaffold(
-        appBar: AppBar(
-          title: SizedBox(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: _removeDay,
-                      child: SvgPicture.asset(
-                        'assets/icons/arrow-left.svg',
-                        colorFilter: ColorFilter.mode(
-                            Color(0xFFBFBEBE), BlendMode.srcIn),
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    Flexible(
-                      child: GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                              text: '${dateParts[0]} ${dateParts[1]}',
-                              style: TextStyle(
-                                  fontFamily: "Londrina",
-                                  fontSize: 56,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF2E7984)) // Jour
-                              ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _addDay,
-                      child: SvgPicture.asset(
-                        'assets/icons/arrow-right.svg',
-                        colorFilter: ColorFilter.mode(
-                            Color(0xFFBFBEBE), BlendMode.srcIn),
-                        width: 40,
-                        height: 40,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: '${dateParts[2]} ${dateParts[3]}',
-                            style: TextStyle(
-                              color: Color(
-                                  0xFF2E7984), // Couleur du texte de l'AppBar
-                              fontSize: 20.0, // Jour
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+        appBar: DateAppBar(
+            currentDate: _currentDate,
+            onRemoveDay: _removeDay,
+            onAddDay: _addDay,
+            onSelectDate: _selectDate),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
             child: Center(

@@ -16,13 +16,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // Theme
       theme: ThemeData(
+          // Appbar theme
           appBarTheme: AppBarTheme(
+              centerTitle: true,
               toolbarHeight: 100.0,
               titleTextStyle: TextStyle(
                   fontFamily: "Londrina",
-                  fontSize: 64,
+                  fontSize: 56,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF2E7984))),
+          // Color shema
           colorScheme: ColorScheme.light(
             primary: Color(0xFF2E7984),
             secondary: Color(0xFFF8A980),
@@ -99,11 +102,11 @@ class MyApp extends StatelessWidget {
                   TextStyle(fontSize: 16.0, color: Color(0xFFFFFFFF))),
           // Navigation
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            unselectedItemColor:
-                Color(0xFFBFBEBE), // Couleur des éléments non sélectionnés
+            unselectedItemColor: Color(0xFFBFBEBE),
           )),
       initialRoute: RouteManager.home,
       onGenerateRoute: RouteManager.generateRoute,
+      // Localisation delegate for date
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
