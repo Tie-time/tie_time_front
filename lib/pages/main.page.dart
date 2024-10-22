@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/models/user.model.dart';
@@ -7,6 +8,7 @@ import 'package:tie_time_front/routes/routes.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/auth.service.dart';
 import 'package:tie_time_front/services/messages.service.dart';
+import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,6 +20,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late Future<User> _futureUser;
   late AuthService _authService;
+  late DateTime _currentDate;
 
   @override
   void initState() {
@@ -25,6 +28,10 @@ class _MainPageState extends State<MainPage> {
     _authService =
         AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
     _futureUser = _authService.me();
+    _currentDate = DateTime.now();
+    initializeDateFormatting('fr_FR', null).then((_) {
+      setState(() {});
+    });
   }
 
   void _handleLogout() async {
@@ -34,13 +41,41 @@ class _MainPageState extends State<MainPage> {
     Navigator.pushReplacementNamed(context, RouteManager.home);
   }
 
+  void _addDay() {
+    setState(() {
+      _currentDate = _currentDate.add(Duration(days: 1));
+    });
+  }
+
+  void _removeDay() {
+    setState(() {
+      _currentDate = _currentDate.subtract(Duration(days: 1));
+    });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _currentDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      locale: const Locale('fr', 'FR'),
+    );
+    if (picked != null && picked != _currentDate) {
+      setState(() {
+        _currentDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Dashboard'),
-        ),
+        appBar: DateAppBar(
+            currentDate: _currentDate,
+            onRemoveDay: _removeDay,
+            onAddDay: _addDay,
+            onSelectDate: _selectDate),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
             child: Center(
