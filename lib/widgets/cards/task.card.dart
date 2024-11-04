@@ -43,13 +43,6 @@ class _TaskCardState extends State<TaskCard> {
                     onChanged: (bool? value) {
                       _toggleCheckbox();
                     },
-                    side: BorderSide(
-                      color: _isChecked ? Color(0xFF2E7984) : Color(0xFFBFBEBE),
-                      width: 2.0,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
                   ),
                 ),
               ),

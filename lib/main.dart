@@ -82,7 +82,17 @@ class MyApp extends StatelessWidget {
               ),
               labelStyle: TextStyle(color: Color(0xFFBFBEBE), fontSize: 20.0),
               errorStyle: TextStyle(color: Color(0xFFE95569))),
-          // Buttons
+          // Inputs
+          checkboxTheme: CheckboxThemeData(
+            side: BorderSide(
+              color: Color(0xFFBFBEBE),
+              width: 2.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
+          // Cards
           cardTheme: CardTheme(margin: EdgeInsets.all(0.0)),
           // Buttons
           filledButtonTheme: FilledButtonThemeData(
