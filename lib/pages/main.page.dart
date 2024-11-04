@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
+import 'package:tie_time_front/widgets/cards/task.card.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -64,6 +65,9 @@ class _MainPageState extends State<MainPage> {
                 child: SingleChildScrollView(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text('Listes tâches')])))));
+                        children: [
+                  Text('Listes tâches'),
+                  TaskCard(title: 'Tâche 1'),
+                ])))));
   }
 }

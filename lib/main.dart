@@ -83,6 +83,8 @@ class MyApp extends StatelessWidget {
               labelStyle: TextStyle(color: Color(0xFFBFBEBE), fontSize: 20.0),
               errorStyle: TextStyle(color: Color(0xFFE95569))),
           // Buttons
+          cardTheme: CardTheme(margin: EdgeInsets.all(0.0)),
+          // Buttons
           filledButtonTheme: FilledButtonThemeData(
             style: FilledButton.styleFrom(
                 backgroundColor: Color(0xFF2E7984),
