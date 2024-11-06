@@ -37,6 +37,18 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void _updateTitle(String newTitle) {
+    // Create a new task with title if the title is empty
+    if (_task.title.isEmpty && newTitle.isEmpty) {
+      setState(() {
+        _task = _task.copyWith(
+          title: "Nouvelle tâche",
+          isEditing: false,
+        );
+      });
+      return;
+    }
+
+    // Restore title if the new title is empty
     if (newTitle.isEmpty) {
       setState(() {
         _task = _task.copyWith(
@@ -46,6 +58,7 @@ class _TaskCardState extends State<TaskCard> {
       return;
     }
 
+    // Update title
     setState(() {
       _task = _task.copyWith(
         title: newTitle,
