@@ -11,7 +11,6 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
-  bool _isEditing = false;
   late Task _task;
 
   @override
@@ -31,14 +30,18 @@ class _TaskCardState extends State<TaskCard> {
 
   void _toggleEditing() {
     setState(() {
-      _isEditing = !_isEditing;
+      _task = _task.copyWith(
+        isEditing: !_task.isEditing,
+      );
     });
   }
 
   void _updateTitle(String newTitle) {
     if (newTitle.isEmpty) {
       setState(() {
-        _isEditing = false;
+        _task = _task.copyWith(
+          isEditing: false,
+        );
       });
       return;
     }
@@ -46,8 +49,8 @@ class _TaskCardState extends State<TaskCard> {
     setState(() {
       _task = _task.copyWith(
         title: newTitle,
+        isEditing: false,
       );
-      _isEditing = false;
     });
     // send request to update title at parent level
   }
@@ -83,7 +86,7 @@ class _TaskCardState extends State<TaskCard> {
               SizedBox(width: 32.0),
               SizedBox(
                 width: 200.0, // Largeur fixe pour le TextField
-                child: _isEditing
+                child: _task.isEditing
                     ? TextField(
                         onSubmitted: _updateTitle,
                         autofocus: true,

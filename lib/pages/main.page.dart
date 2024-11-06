@@ -78,12 +78,12 @@ class _MainPageState extends State<MainPage> {
   void _addTask() {
     setState(() {
       _tasks.add(Task(
-        id: '4',
-        title: 'Tâche 4',
-        isChecked: false,
-        date: DateTime.now(),
-        order: 4,
-      ));
+          id: UniqueKey().toString(),
+          title: '',
+          isChecked: false,
+          date: _currentDate,
+          order: _tasks.length,
+          isEditing: true));
     });
   }
 
