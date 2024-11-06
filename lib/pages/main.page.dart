@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:tie_time_front/models/task.model.dart';
 import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
-import 'package:tie_time_front/widgets/cards/task.card.dart';
+import 'package:tie_time_front/widgets/lists/tasks.list.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,32 +11,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  // fetch tasks by date
-  // add tasks with date
   late DateTime _currentDate;
-  final List<Task> _tasks = [
-    Task(
-      id: '1',
-      title: 'Tâche 1',
-      isChecked: false,
-      date: DateTime.now(),
-      order: 1,
-    ),
-    Task(
-      id: '2',
-      title: 'Tâche 2',
-      isChecked: false,
-      date: DateTime.now(),
-      order: 2,
-    ),
-    Task(
-      id: '3',
-      title: 'Tâche 3',
-      isChecked: false,
-      date: DateTime.now(),
-      order: 3,
-    ),
-  ]; // Liste des tâches
 
   @override
   void initState() {
@@ -75,18 +49,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  void _addTask() {
-    setState(() {
-      _tasks.add(Task(
-          id: UniqueKey().toString(),
-          title: '',
-          isChecked: false,
-          date: _currentDate,
-          order: _tasks.length,
-          isEditing: true));
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,30 +60,13 @@ class _MainPageState extends State<MainPage> {
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text(
-              'Listes tâches',
-              textAlign: TextAlign.start,
-            ),
-            SizedBox(height: 16.0),
-            SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _tasks
-                    .map((task) => Column(
-                          children: [
-                            TaskCard(task: task),
-                            SizedBox(height: 16.0), // Espace entre les éléments
-                          ],
-                        ))
-                    .toList(),
-              ),
-            ),
-            FilledButton(
-              onPressed: _addTask,
-              child: const Text('+'),
-            ), // Boucle pour afficher les tâches
-          ]),
+          child: Column(
+            children: [
+              TasksList(
+                currentDate: _currentDate,
+              )
+            ],
+          ),
         ),
       ),
     );
