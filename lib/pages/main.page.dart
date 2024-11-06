@@ -14,6 +14,7 @@ class _MainPageState extends State<MainPage> {
   // fetch tasks by date
   // add tasks with date
   late DateTime _currentDate;
+  List<String> _tasks = ['Tâche 1', 'Tâche 2', 'Tâche 3']; // Liste des tâches
 
   @override
   void initState() {
@@ -51,23 +52,49 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  void _addTask() {
+    setState(() {
+      _tasks.add("Tâche");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DateAppBar(
-            currentDate: _currentDate,
-            onRemoveDay: _removeDay,
-            onAddDay: _addDay,
-            onSelectDate: _selectDate),
-        body: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Center(
-                child: SingleChildScrollView(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                  Text('Listes tâches'),
-                  TaskCard(title: 'Tâche 1'),
-                ])))));
+      appBar: DateAppBar(
+          currentDate: _currentDate,
+          onRemoveDay: _removeDay,
+          onAddDay: _addDay,
+          onSelectDate: _selectDate),
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Text(
+              'Listes tâches',
+              textAlign: TextAlign.start,
+            ),
+            SizedBox(height: 16.0),
+            SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: _tasks
+                    .map((task) => Column(
+                          children: [
+                            TaskCard(title: task),
+                            SizedBox(height: 16.0), // Espace entre les éléments
+                          ],
+                        ))
+                    .toList(),
+              ),
+            ),
+            FilledButton(
+              onPressed: _addTask,
+              child: const Text('+'),
+            ), // Boucle pour afficher les tâches
+          ]),
+        ),
+      ),
+    );
   }
 }
