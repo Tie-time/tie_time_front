@@ -11,6 +11,14 @@ class TaskCard extends StatefulWidget {
 
 class _TaskCardState extends State<TaskCard> {
   bool _isChecked = false;
+  bool _isEditing = false;
+  late String _title;
+
+  @override
+  void initState() {
+    super.initState();
+    _title = widget.title;
+  }
 
   void _toggleCheckbox() {
     setState(() {
@@ -19,9 +27,31 @@ class _TaskCardState extends State<TaskCard> {
     // send request to update task at parent level
   }
 
+  void _toggleEditing() {
+    setState(() {
+      _isEditing = !_isEditing;
+    });
+  }
+
+  void _updateTitle(String newTitle) {
+    if (newTitle.isEmpty) {
+      setState(() {
+        _isEditing = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _title = newTitle;
+      _isEditing = false;
+    });
+    // send request to update title at parent level
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onLongPress: _toggleEditing,
       onTap: _toggleCheckbox,
       child: Card.filled(
         shape: RoundedRectangleBorder(
@@ -47,7 +77,36 @@ class _TaskCardState extends State<TaskCard> {
                 ),
               ),
               SizedBox(width: 32.0),
-              Text(widget.title),
+              SizedBox(
+                width: 200.0, // Largeur fixe pour le TextField
+                child: _isEditing
+                    ? TextField(
+                        onSubmitted: _updateTitle,
+                        autofocus: true,
+                        maxLength: 50,
+                        controller: TextEditingController(text: _title),
+                        // no border and background transparent
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          isDense: true,
+                          fillColor: Colors.transparent,
+                        ),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Color(0xFF2D3A3E),
+                        ),
+                      )
+                    : Text(_title,
+                        style: TextStyle(
+                            color: _isChecked
+                                ? Color(0xFFBFBEBE)
+                                : Color(0xFF2D3A3E))),
+              ),
             ],
           ),
         ),
