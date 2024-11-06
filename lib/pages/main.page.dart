@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:tie_time_front/models/task.model.dart';
 import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
 import 'package:tie_time_front/widgets/cards/task.card.dart';
 
@@ -14,7 +15,29 @@ class _MainPageState extends State<MainPage> {
   // fetch tasks by date
   // add tasks with date
   late DateTime _currentDate;
-  List<String> _tasks = ['Tâche 1', 'Tâche 2', 'Tâche 3']; // Liste des tâches
+  final List<Task> _tasks = [
+    Task(
+      id: '1',
+      title: 'Tâche 1',
+      isChecked: false,
+      date: DateTime.now(),
+      order: 1,
+    ),
+    Task(
+      id: '2',
+      title: 'Tâche 2',
+      isChecked: false,
+      date: DateTime.now(),
+      order: 2,
+    ),
+    Task(
+      id: '3',
+      title: 'Tâche 3',
+      isChecked: false,
+      date: DateTime.now(),
+      order: 3,
+    ),
+  ]; // Liste des tâches
 
   @override
   void initState() {
@@ -54,7 +77,13 @@ class _MainPageState extends State<MainPage> {
 
   void _addTask() {
     setState(() {
-      _tasks.add("Tâche");
+      _tasks.add(Task(
+        id: '4',
+        title: 'Tâche 4',
+        isChecked: false,
+        date: DateTime.now(),
+        order: 4,
+      ));
     });
   }
 
@@ -81,7 +110,7 @@ class _MainPageState extends State<MainPage> {
                 children: _tasks
                     .map((task) => Column(
                           children: [
-                            TaskCard(title: task),
+                            TaskCard(task: task),
                             SizedBox(height: 16.0), // Espace entre les éléments
                           ],
                         ))
