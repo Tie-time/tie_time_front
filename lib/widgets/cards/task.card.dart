@@ -22,12 +22,8 @@ class _TaskCardState extends State<TaskCard> {
 
   void _toggleCheckbox() {
     setState(() {
-      _task = Task(
-        id: _task.id,
-        title: _task.title,
+      _task = _task.copyWith(
         isChecked: !_task.isChecked,
-        date: _task.date,
-        order: _task.order,
       );
     });
     // send request to update task at parent level
@@ -48,12 +44,8 @@ class _TaskCardState extends State<TaskCard> {
     }
 
     setState(() {
-      _task = Task(
-        id: _task.id,
+      _task = _task.copyWith(
         title: newTitle,
-        isChecked: _task.isChecked,
-        date: _task.date,
-        order: _task.order,
       );
       _isEditing = false;
     });

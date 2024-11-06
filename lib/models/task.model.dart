@@ -26,4 +26,19 @@ class Task {
       throw FormatException('Failed to load Task: $e');
     }
   }
+
+  Task copyWith(
+      {String? id,
+      String? title,
+      bool? isChecked,
+      DateTime? date,
+      int? order}) {
+    return Task(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      isChecked: isChecked ?? this.isChecked,
+      date: date ?? this.date,
+      order: order ?? this.order,
+    );
+  }
 }
