@@ -8,9 +8,9 @@ import 'package:tie_time_front/services/task.service.dart';
 import 'package:tie_time_front/widgets/cards/task.card.dart';
 
 class TasksList extends StatefulWidget {
-  final DateTime currentDate;
+  final ValueNotifier<DateTime> currentDateNotifier;
 
-  const TasksList({super.key, required this.currentDate});
+  const TasksList({super.key, required this.currentDateNotifier});
 
   @override
   State<TasksList> createState() => _TasksListState();
@@ -23,15 +23,23 @@ class _TasksListState extends State<TasksList> {
 
   late Future<List<Task>> _futureTasks;
   late TaskService _taskService;
-  late DateTime _currentDate;
 
   @override
   void initState() {
     super.initState();
-    _currentDate = widget.currentDate;
     _taskService =
         TaskService(apiService: ApiService(baseUrl: Environnement.apiUrl));
-    _futureTasks = _taskService.tasks(_currentDate.toString());
+    _loadTasks(widget.currentDateNotifier.value);
+    // Listen to changes on the current date
+    widget.currentDateNotifier.addListener(() {
+      _loadTasks(widget.currentDateNotifier.value);
+    });
+  }
+
+  void _loadTasks(DateTime date) {
+    setState(() {
+      _futureTasks = _taskService.tasks(date.toString());
+    });
   }
 
   void _addTask() {
@@ -41,7 +49,7 @@ class _TasksListState extends State<TasksList> {
             id: UniqueKey().toString(),
             title: '',
             isChecked: false,
-            date: _currentDate,
+            date: widget.currentDateNotifier.value,
             order: _tasks.length,
             isEditing: true));
       });
@@ -61,9 +69,10 @@ class _TasksListState extends State<TasksList> {
           future: _futureTasks,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              final tasks = snapshot.data!;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _tasks
+                children: tasks
                     .map((task) => Column(
                           children: [
                             TaskCard(task: task),

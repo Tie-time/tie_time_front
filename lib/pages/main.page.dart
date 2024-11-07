@@ -11,12 +11,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late DateTime _currentDate;
+  late ValueNotifier<DateTime> _currentDateNotifier;
 
   @override
   void initState() {
     super.initState();
-    _currentDate = DateTime.now();
+    _currentDateNotifier = ValueNotifier<DateTime>(DateTime.now());
     initializeDateFormatting('fr_FR', null).then((_) {
       setState(() {});
     });
@@ -24,27 +24,29 @@ class _MainPageState extends State<MainPage> {
 
   void _addDay() {
     setState(() {
-      _currentDate = _currentDate.add(Duration(days: 1));
+      _currentDateNotifier.value =
+          _currentDateNotifier.value.add(Duration(days: 1));
     });
   }
 
   void _removeDay() {
     setState(() {
-      _currentDate = _currentDate.subtract(Duration(days: 1));
+      _currentDateNotifier.value =
+          _currentDateNotifier.value.subtract(Duration(days: 1));
     });
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _currentDate,
+      initialDate: _currentDateNotifier.value,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
       locale: const Locale('fr', 'FR'),
     );
-    if (picked != null && picked != _currentDate) {
+    if (picked != null && picked != _currentDateNotifier.value) {
       setState(() {
-        _currentDate = picked;
+        _currentDateNotifier.value = picked;
       });
     }
   }
@@ -53,7 +55,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DateAppBar(
-          currentDate: _currentDate,
+          currentDate: _currentDateNotifier.value,
           onRemoveDay: _removeDay,
           onAddDay: _addDay,
           onSelectDate: _selectDate),
@@ -63,7 +65,7 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             children: [
               TasksList(
-                currentDate: _currentDate,
+                currentDateNotifier: _currentDateNotifier,
               )
             ],
           ),

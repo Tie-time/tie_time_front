@@ -20,7 +20,7 @@ class Task {
         id: json['id'] as String,
         title: json['title'] as String,
         isChecked: json['is_checked'] as bool,
-        date: json['date'] as DateTime,
+        date: DateTime.parse(json['date'] as String),
         order: json['order'] as int,
       );
     } catch (e) {
