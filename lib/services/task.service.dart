@@ -12,4 +12,9 @@ class TaskService {
         await apiService.get('$prefix/?date=$currendDate');
     return responseBody.map((task) => Task.fromJson(task)).toList();
   }
+
+  Future<Map<String, dynamic>> createTask(Task task) async {
+    return await apiService
+        .post('$prefix/', {'title': task.title, 'date': task.date.toString()});
+  }
 }

@@ -3,8 +3,9 @@ import 'package:tie_time_front/models/task.model.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
+  final Function(Task) onCreateTask;
 
-  const TaskCard({super.key, required this.task});
+  const TaskCard({super.key, required this.task, required this.onCreateTask});
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -45,6 +46,7 @@ class _TaskCardState extends State<TaskCard> {
           isEditing: false,
         );
       });
+      widget.onCreateTask(_task);
       return;
     }
 
@@ -65,7 +67,8 @@ class _TaskCardState extends State<TaskCard> {
         isEditing: false,
       );
     });
-    // send request to update title at parent level
+
+    widget.onCreateTask(_task);
   }
 
   @override

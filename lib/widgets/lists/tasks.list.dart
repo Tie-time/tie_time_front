@@ -20,6 +20,7 @@ class _TasksListState extends State<TasksList> {
   // fetch tasks by date
   // add tasks with date
   final List<Task> _tasks = [];
+  bool _isLoading = false;
 
   late Future<List<Task>> _futureTasks;
   late TaskService _taskService;
@@ -45,7 +46,7 @@ class _TasksListState extends State<TasksList> {
   void _addTask() {
     setState(() {
       _futureTasks.then((tasks) {
-        _tasks.add(Task(
+        tasks.add(Task(
             id: UniqueKey().toString(),
             title: '',
             isChecked: false,
@@ -54,6 +55,24 @@ class _TasksListState extends State<TasksList> {
             isEditing: true));
       });
     });
+  }
+
+  Future<void> _handleCreateTask(Task task) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _taskService.createTask(task);
+      _loadTasks(task.date);
+    } catch (e) {
+      MessageService.showErrorMessage(context, '$e');
+    } finally {
+      _loadTasks(task.date);
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -65,37 +84,45 @@ class _TasksListState extends State<TasksList> {
           textAlign: TextAlign.start,
         ),
         const SizedBox(height: 16.0),
-        FutureBuilder<List<Task>>(
-          future: _futureTasks,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final tasks = snapshot.data!;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: tasks
-                    .map((task) => Column(
-                          children: [
-                            TaskCard(task: task),
-                            SizedBox(height: 16.0), // Espace entre les éléments
-                          ],
-                        ))
-                    .toList(),
-              );
-            } else if (snapshot.hasError) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                MessageService.showErrorMessage(
-                    context, snapshot.error.toString());
-              });
-              return Container();
-            }
-            // By default, show a loading spinner.
-            return const CircularProgressIndicator();
-          },
-        ),
-        FilledButton(
-          onPressed: _addTask,
-          child: const Text('+'),
-        ),
+        _isLoading
+            ? const CircularProgressIndicator()
+            : Column(children: [
+                FutureBuilder<List<Task>>(
+                  future: _futureTasks,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final tasks = snapshot.data!;
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: tasks
+                            .map((task) => Column(
+                                  children: [
+                                    TaskCard(
+                                        task: task,
+                                        onCreateTask: _handleCreateTask),
+                                    SizedBox(
+                                        height:
+                                            16.0), // Espace entre les éléments
+                                  ],
+                                ))
+                            .toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        MessageService.showErrorMessage(
+                            context, snapshot.error.toString());
+                      });
+                      return Container();
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                FilledButton(
+                  onPressed: _addTask,
+                  child: const Text('+'),
+                ),
+              ]),
       ],
     );
   }
