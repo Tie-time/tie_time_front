@@ -25,4 +25,8 @@ class TaskService {
   Future<Map<String, dynamic>> checkTask(String id) async {
     return await apiService.put('$prefix/$id/check', {});
   }
+
+  Future<Map<String, dynamic>> deleteTask(String id) async {
+    return await apiService.delete('$prefix/$id');
+  }
 }

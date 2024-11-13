@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/models/task.model.dart';
@@ -111,6 +112,25 @@ class _TasksListState extends State<TasksList> {
     }
   }
 
+  Future<void> _handleDeleteTask(Task task) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _taskService.deleteTask(task.id);
+      _loadTasks(task.date);
+      MessageService.showSuccesMessage(context, 'Tâche supprimée avec succès');
+    } catch (e) {
+      MessageService.showErrorMessage(context, '$e');
+    } finally {
+      _loadTasks(task.date);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -133,11 +153,26 @@ class _TasksListState extends State<TasksList> {
                         children: tasks
                             .map((task) => Column(
                                   children: [
-                                    TaskCard(
-                                        task: task,
-                                        onCreateTask: _handleCreateTask,
-                                        onUpdateTask: _handleUpdateTask,
-                                        onCheckTask: _handleCheckTask),
+                                    Dismissible(
+                                      key: Key(task.id),
+                                      onDismissed: (direction) {
+                                        _handleDeleteTask(task);
+                                      },
+                                      background: Container(
+                                        decoration: ShapeDecoration(
+                                          color: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                        ),
+                                      ),
+                                      child: TaskCard(
+                                          task: task,
+                                          onCreateTask: _handleCreateTask,
+                                          onUpdateTask: _handleUpdateTask,
+                                          onCheckTask: _handleCheckTask),
+                                    ),
                                     SizedBox(
                                         height:
                                             16.0), // Espace entre les éléments

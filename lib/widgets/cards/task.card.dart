@@ -82,7 +82,7 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: _toggleEditing,
+      onDoubleTap: _toggleEditing,
       onTap: _toggleCheckbox,
       child: Card.filled(
         shape: RoundedRectangleBorder(
