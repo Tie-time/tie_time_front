@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
 import 'package:tie_time_front/models/task.model.dart';
 import 'package:tie_time_front/services/api.service.dart';
@@ -154,16 +155,32 @@ class _TasksListState extends State<TasksList> {
                             .map((task) => Column(
                                   children: [
                                     Dismissible(
+                                      direction: DismissDirection.endToStart,
                                       key: Key(task.id),
                                       onDismissed: (direction) {
                                         _handleDeleteTask(task);
                                       },
                                       background: Container(
                                         decoration: ShapeDecoration(
-                                          color: Colors.red,
+                                          color: Color(0xFFE95569),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
+                                          ),
+                                        ),
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 16.0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/trash.svg',
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.white,
+                                                  BlendMode.srcIn),
+                                              width: 24,
+                                              height: 24,
+                                            ),
                                           ),
                                         ),
                                       ),
