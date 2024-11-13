@@ -4,12 +4,14 @@ import 'package:tie_time_front/models/task.model.dart';
 class TaskCard extends StatefulWidget {
   final Task task;
   final Function(Task) onCreateTask;
+  final Function(Task) onUpdateTask;
   final Function(Task) onCheckTask;
 
   const TaskCard(
       {super.key,
       required this.task,
       required this.onCreateTask,
+      required this.onUpdateTask,
       required this.onCheckTask});
 
   @override
@@ -74,7 +76,7 @@ class _TaskCardState extends State<TaskCard> {
       );
     });
 
-    widget.onCreateTask(_task);
+    widget.onUpdateTask(_task);
   }
 
   @override

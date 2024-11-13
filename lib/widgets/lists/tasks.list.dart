@@ -75,6 +75,24 @@ class _TasksListState extends State<TasksList> {
     }
   }
 
+  Future<void> _handleUpdateTask(Task task) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _taskService.updateTask(task);
+      _loadTasks(task.date);
+    } catch (e) {
+      MessageService.showErrorMessage(context, '$e');
+    } finally {
+      _loadTasks(task.date);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> _handleCheckTask(Task task) async {
     setState(() {
       _isLoading = true;
@@ -118,6 +136,7 @@ class _TasksListState extends State<TasksList> {
                                     TaskCard(
                                         task: task,
                                         onCreateTask: _handleCreateTask,
+                                        onUpdateTask: _handleUpdateTask,
                                         onCheckTask: _handleCheckTask),
                                     SizedBox(
                                         height:

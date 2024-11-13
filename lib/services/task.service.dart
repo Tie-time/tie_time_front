@@ -18,6 +18,10 @@ class TaskService {
         .post('$prefix/', {'title': task.title, 'date': task.date.toString()});
   }
 
+  Future<Map<String, dynamic>> updateTask(Task task) async {
+    return await apiService.put('$prefix/${task.id}', {'title': task.title});
+  }
+
   Future<Map<String, dynamic>> checkTask(String id) async {
     return await apiService.put('$prefix/$id/check', {});
   }
