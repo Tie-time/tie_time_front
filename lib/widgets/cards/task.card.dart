@@ -4,8 +4,13 @@ import 'package:tie_time_front/models/task.model.dart';
 class TaskCard extends StatefulWidget {
   final Task task;
   final Function(Task) onCreateTask;
+  final Function(Task) onCheckTask;
 
-  const TaskCard({super.key, required this.task, required this.onCreateTask});
+  const TaskCard(
+      {super.key,
+      required this.task,
+      required this.onCreateTask,
+      required this.onCheckTask});
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -26,6 +31,7 @@ class _TaskCardState extends State<TaskCard> {
         isChecked: !_task.isChecked,
       );
     });
+    widget.onCheckTask(_task);
     // send request to update task at parent level
   }
 

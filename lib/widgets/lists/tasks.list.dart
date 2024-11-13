@@ -75,6 +75,24 @@ class _TasksListState extends State<TasksList> {
     }
   }
 
+  Future<void> _handleCheckTask(Task task) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _taskService.checkTask(task.id);
+      _loadTasks(task.date);
+    } catch (e) {
+      MessageService.showErrorMessage(context, '$e');
+    } finally {
+      _loadTasks(task.date);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -99,7 +117,8 @@ class _TasksListState extends State<TasksList> {
                                   children: [
                                     TaskCard(
                                         task: task,
-                                        onCreateTask: _handleCreateTask),
+                                        onCreateTask: _handleCreateTask,
+                                        onCheckTask: _handleCheckTask),
                                     SizedBox(
                                         height:
                                             16.0), // Espace entre les éléments

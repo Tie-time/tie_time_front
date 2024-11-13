@@ -17,4 +17,8 @@ class TaskService {
     return await apiService
         .post('$prefix/', {'title': task.title, 'date': task.date.toString()});
   }
+
+  Future<Map<String, dynamic>> checkTask(String id) async {
+    return await apiService.put('$prefix/$id/check', {});
+  }
 }
