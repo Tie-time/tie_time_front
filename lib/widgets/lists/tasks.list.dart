@@ -225,10 +225,6 @@ class _TasksListState extends State<TasksList> {
                     return const CircularProgressIndicator();
                   },
                 ),
-                // FilledButton(
-                //   onPressed: _addTask,
-                //   child: const Text('+'),
-                // ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: FloatingActionButton(
