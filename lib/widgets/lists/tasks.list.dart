@@ -225,9 +225,26 @@ class _TasksListState extends State<TasksList> {
                     return const CircularProgressIndicator();
                   },
                 ),
-                FilledButton(
-                  onPressed: _addTask,
-                  child: const Text('+'),
+                // FilledButton(
+                //   onPressed: _addTask,
+                //   child: const Text('+'),
+                // ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FloatingActionButton(
+                    onPressed: _addTask,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Text(
+                      '+',
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        fontFamily:
+                            'Londrina', // Taille de la police pour le titre
+                      ),
+                    ),
+                  ),
                 ),
               ]),
       ],
