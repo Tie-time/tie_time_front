@@ -19,13 +19,12 @@ class TasksList extends StatefulWidget {
 }
 
 class _TasksListState extends State<TasksList> {
-  // fetch tasks by date
-  // add tasks with date
-  final List<Task> _tasks = [];
   bool _isLoading = false;
 
   late Future<List<Task>> _futureTasks;
   late TaskService _taskService;
+  late int _totalTasksChecked = 0;
+  late int _totalTasks = 0;
 
   @override
   void initState() {
@@ -39,9 +38,21 @@ class _TasksListState extends State<TasksList> {
     });
   }
 
+  int _getTotalTasksChecked(List<Task> tasks) {
+    return tasks.where((task) => task.isChecked).length;
+  }
+
   void _loadTasks(DateTime date) {
     setState(() {
       _futureTasks = _taskService.tasks(date.toString());
+    });
+
+    // Refresh task checked
+    _futureTasks.then((tasks) {
+      setState(() {
+        _totalTasksChecked = _getTotalTasksChecked(tasks);
+        _totalTasks = tasks.length;
+      });
     });
   }
 
@@ -53,7 +64,7 @@ class _TasksListState extends State<TasksList> {
             title: '',
             isChecked: false,
             date: widget.currentDateNotifier.value,
-            order: _tasks.length,
+            order: tasks.length,
             isEditing: true));
       });
     });
@@ -136,9 +147,15 @@ class _TasksListState extends State<TasksList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'Listes tâches',
-          textAlign: TextAlign.start,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            '$_totalTasksChecked/$_totalTasks Tâches (max 4)',
+            style: const TextStyle(
+              fontSize: 24.0, // Taille de la police pour le titre
+              fontWeight: FontWeight.bold, // Mettre le texte en gras
+            ),
+          ),
         ),
         const SizedBox(height: 16.0),
         _isLoading
