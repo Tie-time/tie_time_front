@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tie_time_front/config/environnement.config.dart';
-import 'package:tie_time_front/models/user.model.dart';
-import 'package:tie_time_front/routes/routes.dart';
-import 'package:tie_time_front/services/api.service.dart';
-import 'package:tie_time_front/services/auth.service.dart';
-import 'package:tie_time_front/services/messages.service.dart';
 import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
+import 'package:tie_time_front/widgets/lists/tasks.list.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,52 +11,42 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late Future<User> _futureUser;
-  late AuthService _authService;
-  late DateTime _currentDate;
+  late ValueNotifier<DateTime> _currentDateNotifier;
 
   @override
   void initState() {
     super.initState();
-    _authService =
-        AuthService(apiService: ApiService(baseUrl: Environnement.apiUrl));
-    _futureUser = _authService.me();
-    _currentDate = DateTime.now();
+    _currentDateNotifier = ValueNotifier<DateTime>(DateTime.now());
     initializeDateFormatting('fr_FR', null).then((_) {
       setState(() {});
     });
   }
 
-  void _handleLogout() async {
-    // clear cache
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    Navigator.pushReplacementNamed(context, RouteManager.home);
-  }
-
   void _addDay() {
     setState(() {
-      _currentDate = _currentDate.add(Duration(days: 1));
+      _currentDateNotifier.value =
+          _currentDateNotifier.value.add(Duration(days: 1));
     });
   }
 
   void _removeDay() {
     setState(() {
-      _currentDate = _currentDate.subtract(Duration(days: 1));
+      _currentDateNotifier.value =
+          _currentDateNotifier.value.subtract(Duration(days: 1));
     });
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _currentDate,
+      initialDate: _currentDateNotifier.value,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
       locale: const Locale('fr', 'FR'),
     );
-    if (picked != null && picked != _currentDate) {
+    if (picked != null && picked != _currentDateNotifier.value) {
       setState(() {
-        _currentDate = picked;
+        _currentDateNotifier.value = picked;
       });
     }
   }
@@ -71,40 +54,23 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DateAppBar(
-            currentDate: _currentDate,
-            onRemoveDay: _removeDay,
-            onAddDay: _addDay,
-            onSelectDate: _selectDate),
-        body: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Center(
-                child: SingleChildScrollView(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                  FutureBuilder<User>(
-                    future: _futureUser,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data!.email);
-                      } else if (snapshot.hasError) {
-                        SchedulerBinding.instance.addPostFrameCallback((_) {
-                          MessageService.showErrorMessage(
-                              context, snapshot.error.toString());
-                        });
-                        return Container();
-                      }
-                      // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
-                    },
-                  ),
-                  FilledButton(
-                    onPressed: () {
-                      _handleLogout();
-                    },
-                    child: Text('Se déconnecter'),
-                  ),
-                ])))));
+      appBar: DateAppBar(
+          currentDate: _currentDateNotifier.value,
+          onRemoveDay: _removeDay,
+          onAddDay: _addDay,
+          onSelectDate: _selectDate),
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TasksList(
+                currentDateNotifier: _currentDateNotifier,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

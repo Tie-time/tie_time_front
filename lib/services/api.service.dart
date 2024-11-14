@@ -7,7 +7,7 @@ class ApiService {
 
   ApiService({required this.baseUrl});
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<dynamic> get(String endpoint) async {
     final headers = await _getHeaders();
     final response =
         await http.get(Uri.parse('$baseUrl$endpoint'), headers: headers);
@@ -56,7 +56,7 @@ class ApiService {
     };
   }
 
-  Map<String, dynamic> _processResponse(http.Response response) {
+  dynamic _processResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);
     } else {

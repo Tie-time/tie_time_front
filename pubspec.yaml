@@ -71,6 +71,7 @@ flutter:
     - assets/icons/account.svg
     - assets/icons/arrow-left.svg
     - assets/icons/arrow-right.svg
+    - assets/icons/trash.svg
     - dev.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
