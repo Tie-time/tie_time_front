@@ -59,7 +59,7 @@ class _TasksListState extends State<TasksList> {
     setState(() {
       _futureTasks.then((tasks) {
         tasks.add(Task(
-            id: UniqueKey().toString(),
+            id: '',
             title: '',
             isChecked: false,
             date: widget.currentDateNotifier.value,
@@ -69,77 +69,120 @@ class _TasksListState extends State<TasksList> {
     });
   }
 
-  Future<void> _handleCreateTask(Task task) async {
+  void _handleTaskTitleChange(Task task) {
     setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      await _taskService.createTask(task);
-      _loadTasks(task.date);
-    } catch (e) {
-      MessageService.showErrorMessage(context, '$e');
-    } finally {
-      _loadTasks(task.date);
-      setState(() {
-        _isLoading = false;
+      _futureTasks = _futureTasks.then((tasks) {
+        final index = tasks.indexWhere((t) => t.id == task.id);
+        if (index != -1) {
+          tasks[index] = task;
+        }
+        return tasks;
       });
+    });
+    if (task.id.isEmpty) {
+      _handleCreateTask(task);
+    } else {
+      _handleUpdateTask(task);
     }
   }
 
-  Future<void> _handleUpdateTask(Task task) async {
-    setState(() {
-      _isLoading = true;
-    });
-
+  Future<void> _handleCreateTask(Task task) async {
     try {
-      await _taskService.updateTask(task);
-      _loadTasks(task.date);
+      setState(() {
+        _totalTasks += 1;
+      });
+      final result = await _taskService.createTask(task);
+      // update the task with the id returned by the API
+      setState(() {
+        _futureTasks = _futureTasks.then((tasks) {
+          final index = tasks.indexWhere((t) => t.id == task.id);
+          if (index != -1) {
+            tasks[index] = Task(
+              id: result['task']['id'],
+              title: task.title,
+              isChecked: task.isChecked,
+              date: task.date,
+              order: task.order,
+              isEditing: false,
+            );
+          }
+          return tasks;
+        });
+      });
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
+      setState(() {
+        _isLoading = true;
+      });
       _loadTasks(task.date);
       setState(() {
         _isLoading = false;
       });
-    }
+    } finally {}
+  }
+
+  Future<void> _handleUpdateTask(Task task) async {
+    print("Updating task... ${task.id}");
+    try {
+      await _taskService.updateTask(task);
+    } catch (e) {
+      MessageService.showErrorMessage(context, '$e');
+      setState(() {
+        _isLoading = true;
+      });
+      _loadTasks(task.date);
+      setState(() {
+        _isLoading = false;
+      });
+    } finally {}
   }
 
   Future<void> _handleCheckTask(Task task) async {
     setState(() {
-      _isLoading = true;
+      _totalTasksChecked += task.isChecked ? 1 : -1;
+      _futureTasks = _futureTasks.then((tasks) {
+        final index = tasks.indexWhere((t) => t.id == task.id);
+        if (index != -1) {
+          tasks[index] = task.copyWith(isChecked: !task.isChecked);
+        }
+        return tasks;
+      });
     });
-
     try {
       await _taskService.checkTask(task.id);
-      _loadTasks(task.date);
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
+      setState(() {
+        _isLoading = true;
+      });
       _loadTasks(task.date);
       setState(() {
         _isLoading = false;
       });
-    }
+    } finally {}
   }
 
   Future<void> _handleDeleteTask(Task task) async {
     setState(() {
-      _isLoading = true;
+      _totalTasks -= 1;
+      _futureTasks = _futureTasks.then((tasks) {
+        tasks.removeWhere((t) => t.id == task.id);
+        return tasks;
+      });
     });
-
     try {
       await _taskService.deleteTask(task.id);
-      _loadTasks(task.date);
       MessageService.showSuccesMessage(context, 'Tâche supprimée avec succès');
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
+      setState(() {
+        _isLoading = true;
+      });
       _loadTasks(task.date);
       setState(() {
         _isLoading = false;
       });
-    }
+    } finally {}
   }
 
   @override
@@ -202,8 +245,8 @@ class _TasksListState extends State<TasksList> {
                                       ),
                                       child: TaskCard(
                                           task: task,
-                                          onCreateTask: _handleCreateTask,
-                                          onUpdateTask: _handleUpdateTask,
+                                          onTaskTitleChange:
+                                              _handleTaskTitleChange,
                                           onCheckTask: _handleCheckTask),
                                     ),
                                     SizedBox(

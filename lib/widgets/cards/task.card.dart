@@ -3,15 +3,13 @@ import 'package:tie_time_front/models/task.model.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
-  final Function(Task) onCreateTask;
-  final Function(Task) onUpdateTask;
+  final Function(Task) onTaskTitleChange;
   final Function(Task) onCheckTask;
 
   const TaskCard(
       {super.key,
       required this.task,
-      required this.onCreateTask,
-      required this.onUpdateTask,
+      required this.onTaskTitleChange,
       required this.onCheckTask});
 
   @override
@@ -54,7 +52,7 @@ class _TaskCardState extends State<TaskCard> {
           isEditing: false,
         );
       });
-      widget.onCreateTask(_task);
+      widget.onTaskTitleChange(_task);
       return;
     }
 
@@ -76,7 +74,7 @@ class _TaskCardState extends State<TaskCard> {
       );
     });
 
-    widget.onUpdateTask(_task);
+    widget.onTaskTitleChange(_task);
   }
 
   @override
