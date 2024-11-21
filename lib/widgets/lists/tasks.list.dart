@@ -18,8 +18,6 @@ class TasksList extends StatefulWidget {
 }
 
 class _TasksListState extends State<TasksList> {
-  bool _isLoading = false;
-
   late Future<List<Task>> _futureTasks;
   late TaskService _taskService;
   late int _totalTasksChecked = 0;
@@ -55,11 +53,11 @@ class _TasksListState extends State<TasksList> {
     });
   }
 
-  void _addTask() {
+  void _onEditingNewTask() {
     setState(() {
       _futureTasks.then((tasks) {
         tasks.add(Task(
-            id: UniqueKey().toString(),
+            id: '',
             title: '',
             isChecked: false,
             date: widget.currentDateNotifier.value,
@@ -69,76 +67,99 @@ class _TasksListState extends State<TasksList> {
     });
   }
 
-  Future<void> _handleCreateTask(Task task) async {
+  void _createTask(Task task, String newId) {
+    Task newTask = task.copyWith(id: newId);
     setState(() {
-      _isLoading = true;
+      _totalTasks += 1;
+      _futureTasks = _futureTasks.then((tasks) {
+        final index = tasks.indexWhere((t) => t.id == task.id);
+        if (index != -1) {
+          tasks[index] = newTask;
+        }
+        return tasks;
+      });
     });
+  }
 
+  void _updateTask(Task task) {
+    setState(() {
+      _futureTasks = _futureTasks.then((tasks) {
+        final index = tasks.indexWhere((t) => t.id == task.id);
+        if (index != -1) {
+          tasks[index] = task;
+        }
+        return tasks;
+      });
+    });
+  }
+
+  void _handleTaskTitleChange(Task task) {
+    if (task.id.isEmpty) {
+      _handleCreateTask(task);
+    } else {
+      _handleUpdateTask(task);
+    }
+  }
+
+  Future<void> _handleCreateTask(Task task) async {
     try {
-      await _taskService.createTask(task);
-      _loadTasks(task.date);
+      final result = await _taskService.createTask(task);
+      _createTask(task, result["task"]["id"]);
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
-      _loadTasks(task.date);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   Future<void> _handleUpdateTask(Task task) async {
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       await _taskService.updateTask(task);
-      _loadTasks(task.date);
+      _updateTask(task);
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
-      _loadTasks(task.date);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
-  Future<void> _handleCheckTask(Task task) async {
+  void _checkTask(Task task) {
+    Task newTask = task.copyWith(isChecked: !task.isChecked);
     setState(() {
-      _isLoading = true;
+      _totalTasksChecked += newTask.isChecked ? 1 : -1;
+      _futureTasks = _futureTasks.then((tasks) {
+        final index = tasks.indexWhere((t) => t.id == task.id);
+        if (index != -1) {
+          tasks[index] = newTask;
+        }
+        return tasks;
+      });
     });
+  }
 
+  void _deleteTask(Task task) {
+    setState(() {
+      _totalTasks -= 1;
+      _totalTasksChecked -= task.isChecked ? 1 : 0;
+      _futureTasks = _futureTasks.then((tasks) {
+        tasks.removeWhere((t) => t.id == task.id);
+        return tasks;
+      });
+    });
+  }
+
+  Future<void> _handleCheckTask(Task task) async {
     try {
       await _taskService.checkTask(task.id);
-      _loadTasks(task.date);
+      _checkTask(task);
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
-      _loadTasks(task.date);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   Future<void> _handleDeleteTask(Task task) async {
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       await _taskService.deleteTask(task.id);
-      _loadTasks(task.date);
+      _deleteTask(task);
       MessageService.showSuccesMessage(context, 'Tâche supprimée avec succès');
     } catch (e) {
       MessageService.showErrorMessage(context, '$e');
-    } finally {
-      _loadTasks(task.date);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -157,91 +178,84 @@ class _TasksListState extends State<TasksList> {
           ),
         ),
         const SizedBox(height: 16.0),
-        _isLoading
-            ? const CircularProgressIndicator()
-            : Column(children: [
-                FutureBuilder<List<Task>>(
-                  future: _futureTasks,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final tasks = snapshot.data!;
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: tasks
-                            .map((task) => Column(
-                                  children: [
-                                    Dismissible(
-                                      direction: DismissDirection.endToStart,
-                                      key: Key(task.id),
-                                      onDismissed: (direction) {
-                                        _handleDeleteTask(task);
-                                      },
-                                      background: Container(
-                                        decoration: ShapeDecoration(
-                                          color: Color(0xFFE95569),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 16.0),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/trash.svg',
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.white,
-                                                  BlendMode.srcIn),
-                                              width: 24,
-                                              height: 24,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      child: TaskCard(
-                                          task: task,
-                                          onCreateTask: _handleCreateTask,
-                                          onUpdateTask: _handleUpdateTask,
-                                          onCheckTask: _handleCheckTask),
+        Column(children: [
+          FutureBuilder<List<Task>>(
+            future: _futureTasks,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final tasks = snapshot.data!;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: tasks
+                      .map((task) => Column(
+                            children: [
+                              Dismissible(
+                                direction: DismissDirection.endToStart,
+                                key: Key(task.id),
+                                onDismissed: (direction) {
+                                  _handleDeleteTask(task);
+                                },
+                                background: Container(
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFFE95569),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            16.0), // Espace entre les éléments
-                                  ],
-                                ))
-                            .toList(),
-                      );
-                    } else if (snapshot.hasError) {
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        MessageService.showErrorMessage(
-                            context, snapshot.error.toString());
-                      });
-                      return Container();
-                    }
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: SvgPicture.asset(
+                                        'assets/icons/trash.svg',
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.white, BlendMode.srcIn),
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                child: TaskCard(
+                                    task: task,
+                                    onTaskTitleChange: _handleTaskTitleChange,
+                                    onCheckTask: _handleCheckTask),
+                              ),
+                              SizedBox(
+                                  height: 16.0), // Espace entre les éléments
+                            ],
+                          ))
+                      .toList(),
+                );
+              } else if (snapshot.hasError) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  MessageService.showErrorMessage(
+                      context, snapshot.error.toString());
+                });
+                return Container();
+              }
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: FloatingActionButton(
+              onPressed: _onEditingNewTask,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Text(
+                '+',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontFamily: 'Londrina', // Taille de la police pour le titre
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: FloatingActionButton(
-                    onPressed: _addTask,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      '+',
-                      style: TextStyle(
-                        fontSize: 32.0,
-                        fontFamily:
-                            'Londrina', // Taille de la police pour le titre
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
+              ),
+            ),
+          ),
+        ]),
       ],
     );
   }
