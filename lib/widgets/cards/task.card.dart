@@ -3,15 +3,13 @@ import 'package:tie_time_front/models/task.model.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
-  final Function(Task) onCreateTask;
-  final Function(Task) onUpdateTask;
+  final Function(Task) onTaskTitleChange;
   final Function(Task) onCheckTask;
 
   const TaskCard(
       {super.key,
       required this.task,
-      required this.onCreateTask,
-      required this.onUpdateTask,
+      required this.onTaskTitleChange,
       required this.onCheckTask});
 
   @override
@@ -27,14 +25,18 @@ class _TaskCardState extends State<TaskCard> {
     _task = widget.task;
   }
 
-  void _toggleCheckbox() {
-    setState(() {
-      _task = _task.copyWith(
-        isChecked: !_task.isChecked,
-      );
-    });
+  @override
+  void didUpdateWidget(TaskCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.task != oldWidget.task) {
+      setState(() {
+        _task = widget.task;
+      });
+    }
+  }
+
+  void _onCheckTask() {
     widget.onCheckTask(_task);
-    // send request to update task at parent level
   }
 
   void _toggleEditing() {
@@ -48,13 +50,9 @@ class _TaskCardState extends State<TaskCard> {
   void _updateTitle(String newTitle) {
     // Create a new task with title if the title is empty
     if (_task.title.isEmpty && newTitle.isEmpty) {
-      setState(() {
-        _task = _task.copyWith(
-          title: "Nouvelle tâche",
-          isEditing: false,
-        );
-      });
-      widget.onCreateTask(_task);
+      final taskUpdated =
+          _task.copyWith(title: "Nouvelle tâche", isEditing: false);
+      widget.onTaskTitleChange(taskUpdated);
       return;
     }
 
@@ -69,21 +67,15 @@ class _TaskCardState extends State<TaskCard> {
     }
 
     // Update title
-    setState(() {
-      _task = _task.copyWith(
-        title: newTitle,
-        isEditing: false,
-      );
-    });
-
-    widget.onUpdateTask(_task);
+    final taskUpdated = _task.copyWith(title: newTitle, isEditing: false);
+    widget.onTaskTitleChange(taskUpdated);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: _toggleEditing,
-      onTap: _toggleCheckbox,
+      onTap: _onCheckTask,
       child: Card.filled(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -102,7 +94,7 @@ class _TaskCardState extends State<TaskCard> {
                   child: Checkbox(
                     value: _task.isChecked,
                     onChanged: (bool? value) {
-                      _toggleCheckbox();
+                      _onCheckTask();
                     },
                   ),
                 ),
