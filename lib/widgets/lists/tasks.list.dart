@@ -178,84 +178,83 @@ class _TasksListState extends State<TasksList> {
           ),
         ),
         const SizedBox(height: 16.0),
-        Column(children: [
-          FutureBuilder<List<Task>>(
-            future: _futureTasks,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final tasks = snapshot.data!;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: tasks
-                      .map((task) => Column(
-                            children: [
-                              Dismissible(
-                                direction: DismissDirection.endToStart,
-                                key: Key(task.id),
-                                onDismissed: (direction) {
-                                  _handleDeleteTask(task);
-                                },
-                                background: Container(
-                                  decoration: ShapeDecoration(
-                                    color: Color(0xFFE95569),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/trash.svg',
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.white, BlendMode.srcIn),
-                                        width: 24,
-                                        height: 24,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                child: TaskCard(
-                                    task: task,
-                                    onTaskTitleChange: _handleTaskTitleChange,
-                                    onCheckTask: _handleCheckTask),
+        FutureBuilder<List<Task>>(
+          future: _futureTasks,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final tasks = snapshot.data!;
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return Column(
+                    children: [
+                      Dismissible(
+                        direction: DismissDirection.endToStart,
+                        key: Key(task.id),
+                        onDismissed: (direction) {
+                          _handleDeleteTask(task);
+                        },
+                        background: Container(
+                          decoration: ShapeDecoration(
+                            color: Color(0xFFE95569),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: SvgPicture.asset(
+                                'assets/icons/trash.svg',
+                                colorFilter: ColorFilter.mode(
+                                    Colors.white, BlendMode.srcIn),
+                                width: 24,
+                                height: 24,
                               ),
-                              SizedBox(
-                                  height: 16.0), // Espace entre les éléments
-                            ],
-                          ))
-                      .toList(),
-                );
-              } else if (snapshot.hasError) {
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  MessageService.showErrorMessage(
-                      context, snapshot.error.toString());
-                });
-                return Container();
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: FloatingActionButton(
-              onPressed: _onEditingNewTask,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Text(
-                '+',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontFamily: 'Londrina', // Taille de la police pour le titre
-                ),
+                            ),
+                          ),
+                        ),
+                        child: TaskCard(
+                            task: task,
+                            onTaskTitleChange: _handleTaskTitleChange,
+                            onCheckTask: _handleCheckTask),
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                MessageService.showErrorMessage(
+                    context, snapshot.error.toString());
+              });
+              return Container();
+            }
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: FloatingActionButton(
+            onPressed: _onEditingNewTask,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Text(
+              '+',
+              style: TextStyle(
+                fontSize: 32.0,
+                fontFamily: 'Londrina', // Taille de la police pour le titre
               ),
             ),
           ),
-        ]),
+        ),
       ],
     );
   }
