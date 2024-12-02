@@ -27,6 +27,9 @@ class _TasksListState extends State<TasksList> {
     super.initState();
     _taskProvider = TaskProvider(
         TaskService(apiService: ApiService(baseUrl: Environnement.apiUrl)));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _taskProvider.setContext(context);
+    });
     _loadTasksFuture =
         _taskProvider.loadTasks(widget.currentDateNotifier.value);
     widget.currentDateNotifier.addListener(() {

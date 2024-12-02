@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tie_time_front/models/task.model.dart';
+import 'package:tie_time_front/services/messages.service.dart';
 import 'package:tie_time_front/services/task.service.dart';
 
 class TaskProvider with ChangeNotifier {
   final TaskService _taskService;
+  BuildContext? _context;
   List<Task> _tasks = [];
   int _totalTasksChecked = 0;
 
@@ -12,6 +14,24 @@ class TaskProvider with ChangeNotifier {
   List<Task> get tasks => _tasks;
   int get totalTasksChecked => _totalTasksChecked;
   int get totalTasks => _tasks.length;
+
+  void setContext(BuildContext context) {
+    _context = context;
+  }
+
+// Utiliser le context stocké dans les méthodes
+  void _showError(String message) {
+    if (_context != null) {
+      MessageService.showErrorMessage(_context!, message);
+    }
+  }
+
+// Utiliser le context stocké dans les méthodes
+  void _showSuccess(String message) {
+    if (_context != null) {
+      MessageService.showSuccesMessage(_context!, message);
+    }
+  }
 
   Future<void> loadTasks(DateTime date) async {
     _tasks = await _taskService.tasks(date.toString());
@@ -76,7 +96,7 @@ class TaskProvider with ChangeNotifier {
       final result = await _taskService.createTask(task);
       _createTask(task, result["task"]["id"]);
     } catch (e) {
-      // MessageService.showErrorMessage(context, '$e');
+      _showError('$e');
     }
   }
 
@@ -85,7 +105,7 @@ class TaskProvider with ChangeNotifier {
       await _taskService.updateTask(task);
       _updateTask(task);
     } catch (e) {
-      // MessageService.showErrorMessage(context, '$e');
+      _showError('$e');
     }
   }
 
@@ -94,7 +114,7 @@ class TaskProvider with ChangeNotifier {
       await _taskService.checkTask(task.id);
       _checkTask(task);
     } catch (e) {
-      // MessageService.showErrorMessage(context, '$e');
+      _showError('$e');
     }
   }
 
@@ -102,9 +122,9 @@ class TaskProvider with ChangeNotifier {
     try {
       await _taskService.deleteTask(task.id);
       _deleteTask(task);
-      // MessageService.showSuccesMessage(context, 'Tâche supprimée avec succès');
+      _showSuccess('Tâche supprimée avec succès');
     } catch (e) {
-      // MessageService.showErrorMessage(context, '$e');
+      _showError('$e');
     }
   }
 }
