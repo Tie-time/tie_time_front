@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tie_time_front/widgets/app-bar/date.app-bar.dart';
+import 'package:tie_time_front/widgets/lists/passions.list.dart';
 import 'package:tie_time_front/widgets/lists/tasks.list.dart';
 
 class MainPage extends StatefulWidget {
@@ -65,6 +66,9 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             children: [
               TasksList(
+                currentDateNotifier: _currentDateNotifier,
+              ),
+              PassionsList(
                 currentDateNotifier: _currentDateNotifier,
               )
             ],
