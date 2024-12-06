@@ -39,26 +39,34 @@ class _PassionCardState extends State<PassionCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _onCheckPassion,
-      child: Card.filled(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        color: _passion.isChecked ? Color(0xFFE2F9FF) : Color(0xFFF1F1F1),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(width: 32.0),
-              SizedBox(
-                width: 50.0, // Largeur fixe pour le TextField
-                child: Text(_passion.label,
-                    style: TextStyle(
-                        color: _passion.isChecked
-                            ? Color(0xFFBFBEBE)
-                            : Color(0xFF2D3A3E))),
+      child: SizedBox(
+        width: 78,
+        height: 78,
+        child: Card.filled(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: AspectRatio(
+            aspectRatio: 1, // Force un ratio 1:1 pour avoir un carré
+            child: Container(
+              decoration: BoxDecoration(
+                color:
+                    _passion.isChecked ? Color(0xFFF8A980) : Color(0xFFFEF2EC),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: Text(
+                  _passion.label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: _passion.isChecked ? Colors.white : Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
