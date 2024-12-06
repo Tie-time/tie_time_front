@@ -56,37 +56,40 @@ class _PassionsListState extends State<PassionsList> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              FutureBuilder<void>(
-                future: _loadPassionFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    SchedulerBinding.instance.addPostFrameCallback((_) {
-                      MessageService.showErrorMessage(
-                          context, snapshot.error.toString());
-                    });
-                    return Container();
-                  } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: passionProvider.passions.length,
-                      itemBuilder: (context, index) {
-                        final passion = passionProvider.passions[index];
-                        return Row(
-                          children: [
-                            PassionCard(
-                                passion: passion,
-                                onCheckPassion:
-                                    passionProvider.handleCheckPassion),
-                            const SizedBox(height: 16.0),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                },
+              SizedBox(
+                height: 78,
+                child: FutureBuilder<void>(
+                  future: _loadPassionFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        MessageService.showErrorMessage(
+                            context, snapshot.error.toString());
+                      });
+                      return Container();
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: passionProvider.passions.length,
+                        itemBuilder: (context, index) {
+                          final passion = passionProvider.passions[index];
+                          return Row(
+                            children: [
+                              PassionCard(
+                                  passion: passion,
+                                  onCheckPassion:
+                                      passionProvider.handleCheckPassion),
+                              const SizedBox(width: 16.0),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           );
