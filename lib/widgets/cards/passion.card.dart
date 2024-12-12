@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tie_time_front/models/passion.model.dart';
 
 class PassionCard extends StatefulWidget {
@@ -19,6 +20,8 @@ class _PassionCardState extends State<PassionCard> {
   void initState() {
     super.initState();
     _passion = widget.passion;
+    print(_passion.iconPath);
+    print(_passion.iconUrl);
   }
 
   @override
@@ -56,15 +59,18 @@ class _PassionCardState extends State<PassionCard> {
               ),
               padding: const EdgeInsets.all(8),
               child: Center(
-                child: Text(
-                  _passion.label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: _passion.isChecked ? Colors.white : Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: SvgPicture.network(
+                  _passion.iconUrl,
+                  width: 32,
+                  height: 32,
                 ),
+                // child: Text(
+                //   _passion.label,
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontSize: 16,
+                //     fontWeight: FontWeight.bold,
+                //   ),
               ),
             ),
           ),
