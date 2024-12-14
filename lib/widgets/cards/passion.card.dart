@@ -20,8 +20,6 @@ class _PassionCardState extends State<PassionCard> {
   void initState() {
     super.initState();
     _passion = widget.passion;
-    print(_passion.iconPath);
-    print(_passion.iconUrl);
   }
 
   @override

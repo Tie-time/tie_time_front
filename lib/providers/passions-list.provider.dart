@@ -44,9 +44,9 @@ class PassionProvider with ChangeNotifier {
     }
   }
 
-  Future<void> handleCheckPassion(Passion passion) async {
+  Future<void> handleCheckPassion(Passion passion, DateTime date) async {
     try {
-      // await _passionService.checkPassion(task.id);
+      await _passionService.checkPassion(passion.id, date.toString());
       _checkPassion(passion);
     } catch (e) {
       _showError('$e');

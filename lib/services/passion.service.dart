@@ -7,13 +7,12 @@ class PassionService {
 
   PassionService({required this.apiService});
 
-  Future<List<Passion>> passions(String currendDate) async {
-    List<dynamic> responseBody =
-        await apiService.get('$prefix/?date=$currendDate');
+  Future<List<Passion>> passions(String date) async {
+    List<dynamic> responseBody = await apiService.get('$prefix/?date=$date');
     return responseBody.map((passion) => Passion.fromJson(passion)).toList();
   }
 
-  Future<Map<String, dynamic>> checkPassions(String id) async {
-    return await apiService.put('$prefix/$id/check', {});
+  Future<Map<String, dynamic>> checkPassion(int id, String date) async {
+    return await apiService.post('$prefix/$id/check/?date=$date', {});
   }
 }

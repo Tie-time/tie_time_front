@@ -80,8 +80,10 @@ class _PassionsListState extends State<PassionsList> {
                             children: [
                               PassionCard(
                                   passion: passion,
-                                  onCheckPassion:
-                                      passionProvider.handleCheckPassion),
+                                  onCheckPassion: (passion) =>
+                                      passionProvider.handleCheckPassion(
+                                          passion,
+                                          widget.currentDateNotifier.value)),
                               const SizedBox(width: 16.0),
                             ],
                           );
