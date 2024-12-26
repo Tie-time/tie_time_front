@@ -1,17 +1,17 @@
 class Rate {
   final String? id;
-  final int typeRate;
   final String label;
   final int outOf;
-  final double? score;
+  final double score;
+  final int typeRate;
   final bool isEditing;
 
   const Rate(
       {this.id,
-      required this.typeRate,
       required this.label,
       required this.outOf,
-      this.score,
+      required this.score,
+      required this.typeRate,
       this.isEditing = false});
 
   factory Rate.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ class Rate {
         label: json['label'] as String,
         outOf: json['out_of'] as int,
         typeRate: json['type_rate_id'] as int,
-        score: json['score'] != null ? json['score'] as double : null,
+        score: json['score'] != null ? json['score'] as double : 0,
       );
     } catch (e) {
       throw FormatException('Failed to load Rate: $e');
@@ -37,10 +37,10 @@ class Rate {
       bool? isEditing}) {
     return Rate(
       id: id ?? this.id,
-      typeRate: typeRate ?? this.typeRate,
       label: label ?? this.label,
       score: score ?? this.score,
       outOf: outOf ?? this.outOf,
+      typeRate: typeRate ?? this.typeRate,
       isEditing: isEditing ?? this.isEditing,
     );
   }
