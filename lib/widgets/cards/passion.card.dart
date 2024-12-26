@@ -47,28 +47,14 @@ class _PassionCardState extends State<PassionCard> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: AspectRatio(
-            aspectRatio: 1, // Force un ratio 1:1 pour avoir un carré
-            child: Container(
-              decoration: BoxDecoration(
-                color:
-                    _passion.isChecked ? Color(0xFFF8A980) : Color(0xFFFEF2EC),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: SvgPicture.network(
-                  _passion.iconUrl,
-                  width: 32,
-                  height: 32,
-                ),
-                // child: Text(
-                //   _passion.label,
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     fontSize: 16,
-                //     fontWeight: FontWeight.bold,
-                //   ),
+          color: _passion.isChecked ? Color(0xFFF8A980) : Color(0xFFFEF2EC),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(
+              child: SvgPicture.network(
+                _passion.iconUrl,
+                width: 46,
+                height: 46,
               ),
             ),
           ),

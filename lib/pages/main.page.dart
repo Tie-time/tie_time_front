@@ -69,9 +69,11 @@ class _MainPageState extends State<MainPage> {
               TasksList(
                 currentDateNotifier: _currentDateNotifier,
               ),
+              const SizedBox(height: 32),
               PassionsList(
                 currentDateNotifier: _currentDateNotifier,
               ),
+              const SizedBox(height: 32),
               RatesList(
                 currentDateNotifier: _currentDateNotifier,
               )

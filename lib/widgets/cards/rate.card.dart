@@ -32,30 +32,21 @@ class _RateCardState extends State<RateCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: SizedBox(
-        width: 78,
-        height: 78,
-        child: Card.filled(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: AspectRatio(
-            aspectRatio: 1, // Force un ratio 1:1 pour avoir un carré
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFEEECD8),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Text(
-                  _rate.label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+      child: Card.filled(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        color: Color(0xFFEEECD8),
+        child: AspectRatio(
+          aspectRatio: 1, // Force un ratio 1:1 pour avoir un carré
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              _rate.label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

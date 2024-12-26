@@ -17,10 +17,10 @@ class Rate {
   factory Rate.fromJson(Map<String, dynamic> json) {
     try {
       return Rate(
-        id: json['rate_id'] != null ? (json['rate_id'] as String) : null,
-        typeRate: json['id'] as int,
+        id: json['id'] != null ? (json['id'] as String) : null,
         label: json['label'] as String,
         outOf: json['out_of'] as int,
+        typeRate: json['type_rate_id'] as int,
         score: json['score'] != null ? json['score'] as double : null,
       );
     } catch (e) {
@@ -30,11 +30,10 @@ class Rate {
 
   Rate copyWith(
       {String? id,
-      int? typeRate,
       String? label,
       double? score,
       int? outOf,
-      DateTime? date,
+      int? typeRate,
       bool? isEditing}) {
     return Rate(
       id: id ?? this.id,
