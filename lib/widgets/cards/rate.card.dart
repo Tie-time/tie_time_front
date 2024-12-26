@@ -29,9 +29,27 @@ class _RateCardState extends State<RateCard> {
     }
   }
 
+  void _toggleEditing() {
+    setState(() {
+      _rate = _rate.copyWith(
+        isEditing: !_rate.isEditing,
+      );
+    });
+  }
+
+  void _showDescription() {
+    setState(() {
+      _rate = _rate.copyWith(
+        isShowingDescription: !_rate.isShowingDescription,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onDoubleTap: _toggleEditing,
+      onTap: _showDescription,
       child: Card.filled(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -40,49 +58,61 @@ class _RateCardState extends State<RateCard> {
         child: AspectRatio(
           aspectRatio: 1,
           child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(children: [
-              Text(
-                _rate.label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Expanded(
-                child: Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 100, // Taille fixe pour le cercle
-                        height: 100,
-                        child: CircularProgressIndicator(
-                          value: 3 / 5,
-                          strokeWidth: 16,
-                          strokeAlign: -1,
-                          semanticsValue: '3/5',
-                          strokeCap: StrokeCap.round,
-                          backgroundColor: Color(0xFFBFBEBE),
-                          color: Color(0xFF2D3A3E),
-                        ),
-                      ),
+              padding: EdgeInsets.all(16),
+              child: !_rate.isShowingDescription
+                  ? Column(children: [
                       Text(
-                        '3/5',
+                        _rate.label,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D3A3E),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ]),
-          ),
+                      SizedBox(height: 8),
+                      Expanded(
+                        child: Center(
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 100, // Taille fixe pour le cercle
+                                height: 100,
+                                child: CircularProgressIndicator(
+                                  value: 3 / 5,
+                                  strokeWidth: 16,
+                                  strokeAlign: -1,
+                                  semanticsValue: '3/5',
+                                  strokeCap: StrokeCap.round,
+                                  backgroundColor: Color(0xFFBFBEBE),
+                                  color: Color(0xFF2D3A3E),
+                                ),
+                              ),
+                              Text(
+                                '3/5',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2D3A3E),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ])
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          Text(
+                            _rate.description,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ])),
         ),
       ),
     );
