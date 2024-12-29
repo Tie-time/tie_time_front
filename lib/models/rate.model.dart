@@ -3,7 +3,7 @@ class Rate {
   final String label;
   final String description;
   final int outOf;
-  final double score;
+  final int score;
   final int typeRate;
   final bool isEditing;
   final bool isShowingDescription;
@@ -26,7 +26,7 @@ class Rate {
         description: json['description'] as String,
         outOf: json['out_of'] as int,
         typeRate: json['type_rate_id'] as int,
-        score: json['score'] != null ? json['score'] as double : 0,
+        score: json['score'] != null ? json['score'] as int : 0,
       );
     } catch (e) {
       throw FormatException('Failed to load Rate: $e');
@@ -37,7 +37,7 @@ class Rate {
       {String? id,
       String? label,
       String? description,
-      double? score,
+      int? score,
       int? outOf,
       int? typeRate,
       bool? isEditing,

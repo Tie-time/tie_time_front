@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tie_time_front/models/rate.model.dart';
+import 'package:tie_time_front/widgets/cards/flip.card.dart';
 
 class RateCard extends StatefulWidget {
   final Rate rate;
@@ -10,7 +11,8 @@ class RateCard extends StatefulWidget {
   State<RateCard> createState() => _RateCardState();
 }
 
-class _RateCardState extends State<RateCard> {
+class _RateCardState extends State<RateCard>
+    with SingleTickerProviderStateMixin {
   late Rate _rate;
 
   @override
@@ -37,82 +39,89 @@ class _RateCardState extends State<RateCard> {
     });
   }
 
-  void _showDescription() {
-    setState(() {
-      _rate = _rate.copyWith(
-        isShowingDescription: !_rate.isShowingDescription,
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: _toggleEditing,
-      onTap: _showDescription,
-      child: Card.filled(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        color: Color(0xFFEEECD8),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: Padding(
+      child: FlipCard(
+        front: Card.filled(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Color(0xFFEEECD8),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Padding(
               padding: EdgeInsets.all(16),
-              child: !_rate.isShowingDescription
-                  ? Column(children: [
-                      Text(
-                        _rate.label,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Expanded(
-                        child: Center(
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: 100, // Taille fixe pour le cercle
-                                height: 100,
-                                child: CircularProgressIndicator(
-                                  value: 3 / 5,
-                                  strokeWidth: 16,
-                                  strokeAlign: -1,
-                                  semanticsValue: '3/5',
-                                  strokeCap: StrokeCap.round,
-                                  backgroundColor: Color(0xFFBFBEBE),
-                                  color: Color(0xFF2D3A3E),
-                                ),
-                              ),
-                              Text(
-                                '3/5',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2D3A3E),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ])
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(children: [
+                Text(
+                  _rate.label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Expanded(
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                          Text(
-                            _rate.description,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        SizedBox(
+                          width: 100, // Taille fixe pour le cercle
+                          height: 100,
+                          child: CircularProgressIndicator(
+                            value: _rate.score / _rate.outOf,
+                            strokeWidth: 16,
+                            strokeAlign: -1,
+                            strokeCap: StrokeCap.round,
+                            backgroundColor: Color(0xFFBFBEBE),
+                            color: Color(0xFF2D3A3E),
                           ),
-                        ])),
+                        ),
+                        Text(
+                          _rate.id != null
+                              ? '${_rate.score}/${_rate.outOf}'
+                              : '-/${_rate.outOf}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3A3E),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+          ),
+        ), // Votre widget face avant,
+        back: Card.filled(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Color(0xFFEEECD8),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _rate.description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
