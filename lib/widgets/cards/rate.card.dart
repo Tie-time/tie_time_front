@@ -4,8 +4,10 @@ import 'package:tie_time_front/widgets/cards/flip.card.dart';
 
 class RateCard extends StatefulWidget {
   final Rate rate;
+  final Function(Rate) onRateScoreChange;
 
-  const RateCard({super.key, required this.rate});
+  const RateCard(
+      {super.key, required this.rate, required this.onRateScoreChange});
 
   @override
   State<RateCard> createState() => _RateCardState();
@@ -32,11 +34,41 @@ class _RateCardState extends State<RateCard>
   }
 
   void _toggleEditing() {
-    setState(() {
-      _rate = _rate.copyWith(
-        isEditing: !_rate.isEditing,
-      );
-    });
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              children: [
+                Text(
+                  'Modifier la note',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Nouvelle note',
+                    hintText: '0',
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSubmitted: _updateScore,
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void _updateScore(String newScore) {
+    // Update title
+    final newScoreInteger = int.tryParse(newScore) ?? 0;
+    final rateUpdated = _rate.copyWith(score: newScoreInteger);
+    widget.onRateScoreChange(rateUpdated);
+    Navigator.of(context).pop();
   }
 
   @override
