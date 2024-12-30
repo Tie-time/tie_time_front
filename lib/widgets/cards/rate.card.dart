@@ -35,29 +35,38 @@ class _RateCardState extends State<RateCard>
 
   void _toggleEditing() {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
-          return Container(
-            padding: EdgeInsets.all(32),
-            child: Column(
-              children: [
-                Text(
-                  'Modifier la note',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Modifier la note',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Nouvelle note',
+                        hintText: '0',
+                      ),
+                      keyboardType: TextInputType.number,
+                      onSubmitted: _updateScore,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Nouvelle note',
-                    hintText: '0',
-                  ),
-                  keyboardType: TextInputType.number,
-                  onSubmitted: _updateScore,
-                ),
-              ],
+              ),
             ),
           );
         });
