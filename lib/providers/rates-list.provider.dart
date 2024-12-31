@@ -32,15 +32,15 @@ class RateProvider with ChangeNotifier {
 
   Future<void> loadRates(DateTime date) async {
     _rates = await _rateService.rates(date.toString());
-    print('Chargement des rates:');
-    print('Nombre de rates: ${_rates.length}');
-    _rates.forEach((rate) {
-      print('Rate ID: ${rate.id}');
-      print('Label: ${rate.label}');
-      print('Score: ${rate.score}');
-      print('TypeRate: ${rate.typeRate}');
-      print('------------------------');
-    });
+    // print('Chargement des rates:');
+    // print('Nombre de rates: ${_rates.length}');
+    // _rates.forEach((rate) {
+    //   print('Rate ID: ${rate.id}');
+    //   print('Label: ${rate.label}');
+    //   print('Score: ${rate.score}');
+    //   print('TypeRate: ${rate.typeRate}');
+    //   print('------------------------');
+    // });
     notifyListeners();
   }
 
