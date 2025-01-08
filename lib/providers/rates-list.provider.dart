@@ -32,21 +32,21 @@ class RateProvider with ChangeNotifier {
 
   Future<void> loadRates(DateTime date) async {
     _rates = await _rateService.rates(date.toString());
-    print('Chargement des rates:');
-    print('Nombre de rates: ${_rates.length}');
-    _rates.forEach((rate) {
-      print('Rate ID: ${rate.id}');
-      print('Label: ${rate.label}');
-      print('Score: ${rate.score}');
-      print('TypeRate: ${rate.typeRate}');
-      print('------------------------');
-    });
+    // print('Chargement des rates:');
+    // print('Nombre de rates: ${_rates.length}');
+    // _rates.forEach((rate) {
+    //   print('Rate ID: ${rate.id}');
+    //   print('Label: ${rate.label}');
+    //   print('Score: ${rate.score}');
+    //   print('TypeRate: ${rate.typeRate}');
+    //   print('------------------------');
+    // });
     notifyListeners();
   }
 
   void _createRate(Rate rate, String newId) {
     Rate newRate = rate.copyWith(id: newId);
-    final index = rates.indexWhere((t) => t.id == rate.id);
+    final index = rates.indexWhere((t) => t.typeRate == rate.typeRate);
     if (index != -1) {
       _rates[index] = newRate;
       notifyListeners();
@@ -62,7 +62,7 @@ class RateProvider with ChangeNotifier {
   }
 
   void _deleteRate(Rate rate) {
-    _rates.removeWhere((t) => t.id == rate.id);
+    _rates.removeWhere((t) => t.typeRate == rate.typeRate);
     notifyListeners();
   }
 
@@ -71,7 +71,7 @@ class RateProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void handleRateTitleChange(Rate rate, DateTime date) {
+  void handleRateScoreChange(Rate rate, DateTime date) {
     if (rate.id == null) {
       _handleCreateRate(rate, date);
     } else {
@@ -82,7 +82,7 @@ class RateProvider with ChangeNotifier {
   Future<void> _handleCreateRate(Rate rate, DateTime date) async {
     try {
       final result = await _rateService.createRate(rate, date.toString());
-      _updateRate(rate);
+      _createRate(rate, result["rate"]["id"]);
     } catch (e) {
       _showError('$e');
     }

@@ -1,27 +1,32 @@
 class Rate {
   final String? id;
-  final int typeRate;
   final String label;
+  final String description;
   final int outOf;
-  final double? score;
+  final int score;
+  final int typeRate;
   final bool isEditing;
+  final bool isShowingDescription;
 
   const Rate(
       {this.id,
-      required this.typeRate,
       required this.label,
+      required this.description,
       required this.outOf,
-      this.score,
-      this.isEditing = false});
+      required this.score,
+      required this.typeRate,
+      this.isEditing = false,
+      this.isShowingDescription = false});
 
   factory Rate.fromJson(Map<String, dynamic> json) {
     try {
       return Rate(
-        id: json['rate_id'] != null ? (json['rate_id'] as String) : null,
-        typeRate: json['id'] as int,
+        id: json['id'] != null ? (json['id'] as String) : null,
         label: json['label'] as String,
+        description: json['description'] as String,
         outOf: json['out_of'] as int,
-        score: json['score'] != null ? json['score'] as double : null,
+        typeRate: json['type_rate_id'] as int,
+        score: json['score'] != null ? json['score'] as int : 0,
       );
     } catch (e) {
       throw FormatException('Failed to load Rate: $e');
@@ -30,19 +35,22 @@ class Rate {
 
   Rate copyWith(
       {String? id,
-      int? typeRate,
       String? label,
-      double? score,
+      String? description,
+      int? score,
       int? outOf,
-      DateTime? date,
-      bool? isEditing}) {
+      int? typeRate,
+      bool? isEditing,
+      bool? isShowingDescription}) {
     return Rate(
       id: id ?? this.id,
-      typeRate: typeRate ?? this.typeRate,
       label: label ?? this.label,
+      description: description ?? this.description,
       score: score ?? this.score,
       outOf: outOf ?? this.outOf,
+      typeRate: typeRate ?? this.typeRate,
       isEditing: isEditing ?? this.isEditing,
+      isShowingDescription: isShowingDescription ?? this.isShowingDescription,
     );
   }
 }

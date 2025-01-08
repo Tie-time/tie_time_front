@@ -47,7 +47,7 @@ class _RatesListState extends State<RatesList> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Rates',
+                  'Notes',
                   style: const TextStyle(
                     fontSize: 24.0, // Taille de la police pour le titre
                     fontWeight: FontWeight.bold, // Mettre le texte en gras
@@ -68,18 +68,34 @@ class _RatesListState extends State<RatesList> {
                       });
                       return Container();
                     } else {
-                      return ListView.builder(
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final padding = 16.0;
+                      final spacing = 16.0;
+                      // Calcul de la largeur d'une carte : (largeur écran - (padding gauche + droit) - espace entre cartes) / 2
+                      final cardWidth =
+                          (screenWidth - (padding * 2) - spacing) / 2;
+                      return GridView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: spacing,
+                          mainAxisSpacing: spacing,
+                          childAspectRatio: 1, // Cartes carrées
+                        ),
                         itemCount: rateProvider.rates.length,
                         itemBuilder: (context, index) {
                           final rate = rateProvider.rates[index];
-                          return Row(
-                            children: [
-                              RateCard(
-                                rate: rate,
-                              ),
-                              const SizedBox(width: 16.0),
-                            ],
+                          return SizedBox(
+                            width: cardWidth,
+                            height: cardWidth,
+                            child: RateCard(
+                              rate: rate,
+                              onRateScoreChange: (newRate) => {
+                                rateProvider.handleRateScoreChange(
+                                    newRate, widget.currentDateNotifier.value)
+                              },
+                            ),
                           );
                         },
                       );
