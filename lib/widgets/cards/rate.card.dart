@@ -44,7 +44,11 @@ class _RateCardState extends State<RateCard>
     final result = await showModalBottomSheet<int>(
       isScrollControlled: true,
       context: context,
-      builder: (_) => ScoreModal(initialScore: _rate.score),
+      builder: (_) => ScoreModal(
+          initialScore: _rate.score,
+          title: _rate.label,
+          minScore: 0,
+          maxScore: _rate.outOf),
     );
 
     if (result != null) {
@@ -54,10 +58,10 @@ class _RateCardState extends State<RateCard>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onDoubleTap: _toggleEditing,
-      child: FlipCard(
-        front: Card.filled(
+    return FlipCard(
+      front: GestureDetector(
+        onDoubleTap: _toggleEditing,
+        child: Card.filled(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -110,29 +114,29 @@ class _RateCardState extends State<RateCard>
               ]),
             ),
           ),
-        ), // Votre widget face avant,
-        back: Card.filled(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          color: Color(0xFFEEECD8),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _rate.description,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+        ),
+      ), // Votre widget face avant,
+      back: Card.filled(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        color: Color(0xFFEEECD8),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _rate.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
