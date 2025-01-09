@@ -1,5 +1,5 @@
 class Rate {
-  final String? id;
+  final String id;
   final String label;
   final String description;
   final int outOf;
@@ -9,7 +9,7 @@ class Rate {
   final bool isShowingDescription;
 
   const Rate(
-      {this.id,
+      {required this.id,
       required this.label,
       required this.description,
       required this.outOf,
@@ -21,7 +21,7 @@ class Rate {
   factory Rate.fromJson(Map<String, dynamic> json) {
     try {
       return Rate(
-        id: json['id'] != null ? (json['id'] as String) : null,
+        id: json['id'] != null ? (json['id'] as String) : '',
         label: json['label'] as String,
         description: json['description'] as String,
         outOf: json['out_of'] as int,

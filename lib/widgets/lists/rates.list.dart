@@ -90,12 +90,14 @@ class _RatesListState extends State<RatesList> {
                             width: cardWidth,
                             height: cardWidth,
                             child: RateCard(
-                              rate: rate,
-                              onRateScoreChange: (newRate) => {
-                                rateProvider.handleRateScoreChange(
-                                    newRate, widget.currentDateNotifier.value)
-                              },
-                            ),
+                                rate: rate,
+                                onRateScoreChange: (newRate) => {
+                                      rateProvider.handleRateScoreChange(
+                                          newRate,
+                                          widget.currentDateNotifier.value)
+                                    },
+                                onDeleteScore: (rate) =>
+                                    rateProvider.handleDeleteRate(rate)),
                           );
                         },
                       );

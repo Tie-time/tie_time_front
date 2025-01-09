@@ -6,6 +6,7 @@ class ScoreModal extends StatefulWidget {
   final String title;
   final int minScore;
   final int maxScore;
+  final bool enableDelete;
 
   const ScoreModal({
     super.key,
@@ -13,6 +14,7 @@ class ScoreModal extends StatefulWidget {
     required this.title,
     required this.minScore,
     required this.maxScore,
+    this.enableDelete = true,
   });
 
   @override
@@ -21,11 +23,13 @@ class ScoreModal extends StatefulWidget {
 
 class _ScoreModalState extends State<ScoreModal> {
   late int _score;
+  late bool _enableDelete;
 
   @override
   void initState() {
     super.initState();
     _score = widget.initialScore;
+    _enableDelete = widget.enableDelete;
   }
 
   @override
@@ -71,6 +75,16 @@ class _ScoreModalState extends State<ScoreModal> {
                 onPressed: () => Navigator.pop(context, _score),
                 child: const Text('Valider'),
               ),
+              if (_enableDelete) ...[
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: () => Navigator.pop(context, -1),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Color(0xFFE95569)),
+                  ),
+                  child: const Text('Supprimer'),
+                ),
+              ],
             ],
           ),
         ),

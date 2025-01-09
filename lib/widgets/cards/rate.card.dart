@@ -6,9 +6,13 @@ import 'package:tie_time_front/widgets/modales/score.modale.dart';
 class RateCard extends StatefulWidget {
   final Rate rate;
   final Function(Rate) onRateScoreChange;
+  final Function(Rate) onDeleteScore;
 
   const RateCard(
-      {super.key, required this.rate, required this.onRateScoreChange});
+      {super.key,
+      required this.rate,
+      required this.onRateScoreChange,
+      required this.onDeleteScore});
 
   @override
   State<RateCard> createState() => _RateCardState();
@@ -27,17 +31,27 @@ class _RateCardState extends State<RateCard>
   @override
   void didUpdateWidget(RateCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print("OLD");
+    print(oldWidget.rate.id);
+    print("RATE RESET");
+    print(widget.rate.id);
     if (widget.rate != oldWidget.rate) {
       setState(() {
         _rate = widget.rate;
       });
     }
+    print("RATE AFTER");
+    print(_rate.id);
   }
 
   void _updateScore(int newScore) {
     // Update score
     final rateUpdated = _rate.copyWith(score: newScore);
     widget.onRateScoreChange(rateUpdated);
+  }
+
+  void _deleteScore() {
+    widget.onDeleteScore(_rate);
   }
 
   void _toggleEditing() async {
@@ -48,11 +62,15 @@ class _RateCardState extends State<RateCard>
           initialScore: _rate.score,
           title: _rate.label,
           minScore: 0,
-          maxScore: _rate.outOf),
+          maxScore: _rate.outOf,
+          enableDelete: _rate.id != ''),
     );
 
-    if (result != null) {
+    if (result != null && result >= 0) {
       _updateScore(result);
+    }
+    if (result != null && result < 0) {
+      _deleteScore();
     }
   }
 
@@ -98,7 +116,7 @@ class _RateCardState extends State<RateCard>
                           ),
                         ),
                         Text(
-                          _rate.id != null
+                          _rate.id != ''
                               ? '${_rate.score}/${_rate.outOf}'
                               : '-/${_rate.outOf}',
                           style: TextStyle(

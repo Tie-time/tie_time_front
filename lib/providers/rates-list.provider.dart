@@ -62,8 +62,14 @@ class RateProvider with ChangeNotifier {
   }
 
   void _deleteRate(Rate rate) {
-    _rates.removeWhere((t) => t.typeRate == rate.typeRate);
-    notifyListeners();
+    final resetRate = rate.copyWith(id: '', score: 0);
+    final index = rates.indexWhere((t) => t.typeRate == rate.typeRate);
+    if (index != -1) {
+      _rates[index] = resetRate;
+      notifyListeners();
+      print("DELETE RATE");
+      print(_rates[index].id);
+    }
   }
 
   // void onEditingNewRate(DateTime date) {
@@ -72,7 +78,7 @@ class RateProvider with ChangeNotifier {
   // }
 
   void handleRateScoreChange(Rate rate, DateTime date) {
-    if (rate.id == null) {
+    if (rate.id == '') {
       _handleCreateRate(rate, date);
     } else {
       _handleUpdateRate(rate);
@@ -92,6 +98,19 @@ class RateProvider with ChangeNotifier {
     try {
       await _rateService.updateRate(rate);
       _updateRate(rate);
+    } catch (e) {
+      _showError('$e');
+    }
+  }
+
+  Future<void> handleDeleteRate(Rate rate) async {
+    try {
+      if (rate.id == '') {
+        throw Exception('Impossible de supprimer une tâche non enregistrée');
+      }
+      await _rateService.deleteRate(rate.id);
+      _deleteRate(rate);
+      _showSuccess('Tâche supprimée avec succès');
     } catch (e) {
       _showError('$e');
     }
