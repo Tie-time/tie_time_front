@@ -32,15 +32,6 @@ class RateProvider with ChangeNotifier {
 
   Future<void> loadRates(DateTime date) async {
     _rates = await _rateService.rates(date.toString());
-    // print('Chargement des rates:');
-    // print('Nombre de rates: ${_rates.length}');
-    // _rates.forEach((rate) {
-    //   print('Rate ID: ${rate.id}');
-    //   print('Label: ${rate.label}');
-    //   print('Score: ${rate.score}');
-    //   print('TypeRate: ${rate.typeRate}');
-    //   print('------------------------');
-    // });
     notifyListeners();
   }
 
@@ -110,7 +101,7 @@ class RateProvider with ChangeNotifier {
       }
       await _rateService.deleteRate(rate.id);
       _deleteRate(rate);
-      _showSuccess('Tâche supprimée avec succès');
+      _showSuccess('Note supprimée avec succès');
     } catch (e) {
       _showError('$e');
     }

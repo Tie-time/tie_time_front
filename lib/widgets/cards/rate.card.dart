@@ -31,17 +31,11 @@ class _RateCardState extends State<RateCard>
   @override
   void didUpdateWidget(RateCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("OLD");
-    print(oldWidget.rate.id);
-    print("RATE RESET");
-    print(widget.rate.id);
     if (widget.rate != oldWidget.rate) {
       setState(() {
         _rate = widget.rate;
       });
     }
-    print("RATE AFTER");
-    print(_rate.id);
   }
 
   void _updateScore(int newScore) {
