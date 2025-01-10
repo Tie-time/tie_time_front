@@ -2,33 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:tie_time_front/widgets/buttons/rounded.button.dart';
 import 'package:tie_time_front/widgets/sections/section.layout.dart';
 
-class MaxTaskSection extends StatefulWidget {
+class MaxTaskSection extends StatelessWidget {
   const MaxTaskSection({
     super.key,
+    required this.value,
+    required this.onValueChanged,
   });
-  @override
-  State<MaxTaskSection> createState() => _MaxTaskSectionState();
-}
 
-class _MaxTaskSectionState extends State<MaxTaskSection> {
+  final int value;
+  final ValueChanged<int> onValueChanged;
+
   static const int _maxValue = 10;
   static const int _minValue = 1;
-  int _value = 5; // valeur par défaut
 
   void _increment() {
-    setState(() {
-      if (_value < _maxValue) {
-        _value++;
-      }
-    });
+    if (value < _maxValue) {
+      onValueChanged(value + 1);
+    }
   }
 
   void _decrement() {
-    setState(() {
-      if (_value > _minValue) {
-        _value--;
-      }
-    });
+    if (value > _minValue) {
+      onValueChanged(value - 1);
+    }
   }
 
   @override
@@ -46,7 +42,7 @@ class _MaxTaskSectionState extends State<MaxTaskSection> {
               onPressed: _decrement,
             ),
             Text(
-              _value.toString(),
+              value.toString(),
               style: const TextStyle(
                 fontFamily: "Londrina",
                 fontSize: 56,

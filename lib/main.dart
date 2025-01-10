@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tie_time_front/providers/settings.provider.dart';
 import 'package:tie_time_front/routes/routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,7 +10,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   HttpClient.enableTimelineLogging = true;
   await dotenv.load(fileName: "dev.env");
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => SettingsProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
