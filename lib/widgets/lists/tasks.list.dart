@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tie_time_front/config/environnement.config.dart';
+import 'package:tie_time_front/providers/settings.provider.dart';
 import 'package:tie_time_front/providers/tasks-list.provider.dart';
 import 'package:tie_time_front/services/api.service.dart';
 import 'package:tie_time_front/services/messages.service.dart';
@@ -42,17 +43,42 @@ class _TasksListState extends State<TasksList> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: _taskProvider,
-      child: Consumer<TaskProvider>(
-        builder: (context, taskProvider, child) {
+      child: Consumer2<TaskProvider, SettingsProvider>(
+        builder: (context, taskProvider, settingsProvider, child) {
           return Column(
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  '${taskProvider.totalTasksChecked}/${taskProvider.totalTasks} Tâches (max 4)',
-                  style: const TextStyle(
-                    fontSize: 24.0, // Taille de la police pour le titre
-                    fontWeight: FontWeight.bold, // Mettre le texte en gras
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${taskProvider.totalTasksChecked}/',
+                        style: const TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2D3A3E),
+                        ),
+                      ),
+                      TextSpan(
+                        text: taskProvider.totalTasks.toString(),
+                        style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            color: taskProvider.totalTasks >
+                                    settingsProvider.settings.maxTasks
+                                ? Color(0xFFE95569)
+                                : Color(0xFF2D3A3E)),
+                      ),
+                      TextSpan(
+                        text:
+                            ' Tâches (max ${settingsProvider.settings.maxTasks})',
+                        style: const TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3A3E)),
+                      ),
+                    ],
                   ),
                 ),
               ),
